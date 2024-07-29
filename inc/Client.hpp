@@ -14,6 +14,7 @@ class Client
         void setNickname(std::string& nickname);
         void setUsername(std::string& username);
         void setBuffer(std::string buffer);
+        void addBuffer(std::string& buffer);
         void setAllowedStatus(bool isAllowed);
         void setRegisteredStatus(bool isRegistered);
 

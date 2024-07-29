@@ -37,6 +37,7 @@ class Server
 
         void acceptNewClient(void);
         void receiveMessage(int& i);
+        std::vector<std::string> _parseBuffer(std::string& str);
         void checkMessage(int& i, std::string& message);
         std::vector<std::string> _parseMessage(std::string& str, char delim);
         

@@ -46,8 +46,14 @@ void Server::doPollLoop(void)
             //return 1; // throw exception instead ?
         }
         cur_size = this->_nfds;
-        for (int i = 0; i < cur_size; i ++)
+#ifdef DEBUG
+        printf("cur size: %i\n", cur_size);
+#endif
+        for (int i = 0; i < this->_nfds; i ++)
         {
+#ifdef DEBUG
+            printf("i: %i, nfds: %i\n", i, this->_nfds);
+#endif
             if (this->_fds[i].revents == 0)
             {
                 continue;
@@ -69,8 +75,9 @@ void Server::acceptNewClient(void)
     int sock_cl = accept(this->_sock, NULL, NULL); // protect ?
     Client client(sock_cl);
     client.setSock(sock_cl);
+#ifdef DEBUG
     printf("New client connected\n");
-
+#endif
     this->_clients[sock_cl] = client;
     this->_fds.push_back({sock_cl, POLLIN});
     this->_nfds ++;
@@ -92,13 +99,32 @@ void Server::receiveMessage(int& i)
     {
 #ifdef DEBUG
         printf("from client%d: %s", i, buffer);
-        for (int k = 0; buffer[k] != 0; k++)
-        {
-            printf("%d\n", buffer[k]);
-        }
+        // for (int k = 0; buffer[k] != 0; k ++)
+        // {
+        //     printf("%d\n", buffer[k]);
+        // }
 #endif
-        std::string msg(buffer, bytes_read);
-        checkMessage(i, msg);
+        std::string buf(buffer, bytes_read);
+        this->_clients[this->_fds[i].fd].addBuffer(buf);
+        buf = this->_clients[this->_fds[i].fd].getBuffer();
+        std::vector<std::string> msgs = _parseBuffer(buf);
+        this->_clients[this->_fds[i].fd].setBuffer("");
+
+        for (int m = 0; m < msgs.size(); m ++)
+        {
+            if (m == msgs.size() - 1 && (buf[buf.size() - 1] != '\n' || buf[buf.size() - 2] != '\r'))
+            {
+                this->_clients[this->_fds[i].fd].setBuffer(msgs[m]);
+            }
+            else
+            {
+                checkMessage(i, msgs[m]);
+            }
+        }
+#ifdef DEBUG
+        printf("buf in the end of the loop: *%s*\n", this->_clients[this->_fds[i].fd].getBuffer().c_str());
+        printf("number of clients: %i\n", this->_nfds);
+#endif
 
         // for (int j = 1; j < this->_nfds; j++)
         // {
@@ -108,17 +134,34 @@ void Server::receiveMessage(int& i)
     }
 }
 
+std::vector<std::string> Server::_parseBuffer(std::string& str)
+{
+    std::vector<std::string> msgs;
+    int start = 0;
+    int pos = 0;
+
+#ifdef DEBUG
+    printf("Parsing buffer\n");
+#endif
+
+    while ((pos = str.find("\r\n", start)) != std::string::npos)
+    {
+        msgs.push_back(str.substr(start, pos - start));
+        start = pos + 2;
+    }
+    if (start < str.size())
+    {
+        msgs.push_back(str.substr(start));
+    }
+    return (msgs);
+}
+
 void Server::checkMessage(int& i, std::string& msg)
 {
     std::vector<std::string> args;
     Client client = this->_clients[this->_fds[i].fd];
 
     args = _parseMessage(msg, ' ');
-    //std::string msg = this->_clients[this->_fds[i].fd].getBuffer();
-    // if (msg.find("PASS") != std::string::npos)
-    // {
-    //     _pass(this->_fds[i].fd);
-    // }
 
     if (args[0] == "PASS")
     {
@@ -132,8 +175,8 @@ std::vector<std::string> Server::_parseMessage(std::string& str, char delim)
 {
     std::vector<std::string> args;
 
-    str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
-    str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
+    //str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
+    //str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
     std::stringstream ss(str);
     std::string token;
     while (std::getline(ss, token, delim))

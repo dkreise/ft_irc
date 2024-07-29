@@ -24,6 +24,11 @@ void Client::setBuffer(std::string buffer)
     this->_buffer = buffer;
 }
 
+void Client::addBuffer(std::string& buffer)
+{
+    this->_buffer += buffer;
+}
+
 void Client::setAllowedStatus(bool isAllowed)
 {
     this->_isAllowed = isAllowed;
