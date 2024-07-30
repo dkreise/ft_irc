@@ -39,6 +39,11 @@ void Client::setRegisteredStatus(bool isRegistered)
     this->_isRegistered = isRegistered;
 }
 
+void Client::addChannel(std::string& channel)
+{
+    this->_channels.push_back(channel);
+}
+
 int Client::getSock(void) const
 {
     return (this->_sock);

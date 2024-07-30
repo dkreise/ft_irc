@@ -17,6 +17,7 @@ class Client
         void addBuffer(std::string& buffer);
         void setAllowedStatus(bool isAllowed);
         void setRegisteredStatus(bool isRegistered);
+        void addChannel(std::string& channel);
 
         int getSock(void) const;
         std::string getNickname(void) const;
@@ -32,6 +33,7 @@ class Client
         std::string _buffer;
         bool _isAllowed;
         bool _isRegistered;
+        std::vector<std::string> _channels;
 };
 
 #endif
