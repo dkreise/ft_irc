@@ -167,7 +167,10 @@ void Server::checkMessage(int& i, std::string& msg)
     {
         _pass(i, args);
     }
-
+    else if (args[0] == "NICK")
+    {
+        _nick(i, args);
+    }
 
 }
 
@@ -192,12 +195,12 @@ void Server::_pass(int& i, std::vector<std::string>& args)
 
     if (this->_clients[sock].isAllowed() || this->_clients[sock].isRegistered())
     {
-        printf("Already registered\n");
+        std::cout << ERR_ALREADYREGISTERED;
         return; // send error alreadyregistered
     }
     else if (args.size() != 2)
     {
-        printf("Need more params\n");
+        std::cout << ERR_NEEDMOREPARAMS;
         return; // send error needmoreparams
     }
     else if (args[1] == this->_password)
@@ -213,13 +216,41 @@ void Server::_pass(int& i, std::vector<std::string>& args)
         this->_nfds--;
         i--;
         // send error passwordmismatch
-        printf("Password mismatch\n");
+        std::cout << ERR_PASSWDMISMATCH;
     }
 }
 
 void Server::_nick(int& i, std::vector<std::string>& args)
 {
+    int sock = this->_fds[i].fd;
     
+    if (args.size() < 2)
+    {
+        std::cout << ERR_NONICKNAMEGIVEN;
+        return;
+    }
+    std::string nick = args[1];
+    if (_nickIsUsed(nick))
+    {
+        std::cout << ERR_NICKNAMEINUSE;
+        return;
+    }
+    // check for invalid chars
+    std::string old_nick = this->_clients[sock].getNickname();
+    this->_clients[sock].setNickname(nick);
+    // send to users not server:
+    printf(":%s NICK %s\n", old_nick.c_str(), nick.c_str());
+}
+
+bool Server::_nickIsUsed(std::string& nick)
+{
+    for (int i = 1; i < this->_nfds; i ++)
+    {
+        int sock = this->_fds[i].fd;
+        if (this->_clients[sock].getNickname() == nick)
+            return true;
+    }
+    return false;
 }
 
 

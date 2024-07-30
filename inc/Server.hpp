@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <cstdio>
 #include <string.h>
 #include <poll.h>
 #include <vector>
@@ -15,6 +16,7 @@
 #include <sstream>
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "Errors.hpp"
 
 #define DEBUG
 
@@ -55,6 +57,9 @@ class Server
         void _invite();
         void _topic();
         void _mode();
+
+        // help functions
+        bool _nickIsUsed(std::string& nick);
         
 };
 
