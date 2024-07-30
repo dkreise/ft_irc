@@ -14,10 +14,12 @@
 #include <string>
 #include <sstream>
 #include "Client.hpp"
+#include "Channel.hpp"
 
 #define DEBUG
 
 class Client;
+class Channel;
 
 class Server
 {
@@ -34,6 +36,7 @@ class Server
         std::vector<struct pollfd> _fds;
         std::map<int, Client> _clients;
         int _nfds;
+        std::vector<Channel> _channels;
 
         void acceptNewClient(void);
         void receiveMessage(int& i);
@@ -41,7 +44,17 @@ class Server
         void checkMessage(int& i, std::string& message);
         std::vector<std::string> _parseMessage(std::string& str, char delim);
         
+        // connection messages
         void _pass(int& i, std::vector<std::string>& args);
+        void _nick(int&i, std::vector<std::string>& args);
+        void _user(int& i, std::vector<std::string>& args);
+
+        // channel operations
+        void _join();
+        void _kick();
+        void _invite();
+        void _topic();
+        void _mode();
         
 };
 

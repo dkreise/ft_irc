@@ -217,6 +217,11 @@ void Server::_pass(int& i, std::vector<std::string>& args)
     }
 }
 
+void Server::_nick(int& i, std::vector<std::string>& args)
+{
+    
+}
+
 
 
 
