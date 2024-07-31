@@ -2,22 +2,22 @@
 #define ERRORS_HPP
 
 // pass
-#define ERR_PASSWDMISMATCH (std::string("464") + " :Password incorrect\n")
-#define ERR_NEEDMOREPARAMS (std::string("461") + " :Not enough parameters\n")
-#define ERR_ALREADYREGISTERED (std::string("462") + " :You may not reregister\n")
+#define ERR_PASSWDMISMATCH(client) (std::string("464 ") + client + " :Password incorrect")
+#define ERR_NEEDMOREPARAMS(client, cmd) (std::string("461 ") + client + " " + cmd + " :Not enough parameters")
+#define ERR_ALREADYREGISTERED(client) (std::string("462 ") + client + " :You may not reregister")
 
 // nick
-#define ERR_NONICKNAMEGIVEN (std::string("431") + " :No nickname is given\n")
-#define ERR_ERRONEUSNICKNAME (std::string("432") + " :Invalid nickname\n")
-#define ERR_NICKNAMEINUSE (std::string("433") + " :Nickname is in use\n")
+#define ERR_NONICKNAMEGIVEN(client) (std::string("431 ") + client + " :No nickname given")
+#define ERR_ERRONEUSNICKNAME(client, nick) (std::string("432 ") + client + " " + nick + " :Erroneus nickname")
+#define ERR_NICKNAMEINUSE(client, nick) (std::string("433 ") + client + " " + nick + " :Nickname is already in use")
 
 // join
-#define ERR_NOSUCHCHANNEL (std::string("403") + " :No such channel exists\n")
-#define ERR_TOOMANYCHANNELS (std::string("405") + " :Too many channels\n")
-#define ERR_BADCHANNELKEY (std::string("475") + " :Bad channel key\n")
-#define ERR_BANNEDFROMCHAN (std::string("474") + " :Banned from channel\n")
-#define ERR_CHANNELISFULL (std::string("471") + " :Channel is full\n")
-#define ERR_INVITEONLYCHAN (std::string("473") + " :Channel is invite-only\n")
-#define ERR_BADCHANMASK (std::string("476") + " :Bad Channel Mask\n")
+#define ERR_NOSUCHCHANNEL(client, channel) (std::string("403 ") + client + " " + channel + " :No such channel exists")
+#define ERR_TOOMANYCHANNELS(client, channel) (std::string("405 ") + client + " " + channel + " :You have joined too many channels")
+#define ERR_BADCHANNELKEY(client, channel) (std::string("475 ") + client + " " + channel + " :Cannot join channel (+k)")
+#define ERR_BANNEDFROMCHAN(client, channel) (std::string("474 ") + client + " " + channel + " :Cannot join channel (+b)")
+#define ERR_CHANNELISFULL(client, channel) (std::string("471 ") + client + " " + channel + " :Cannot join channel (+l)")
+#define ERR_INVITEONLYCHAN(client, channel) (std::string("473 ") + client + " " + channel + " :Cannot join channel (+i)")
+#define ERR_BADCHANMASK(channel) (std::string("476 ") + channel + " :Bad Channel Mask")
 
 #endif

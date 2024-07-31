@@ -36,12 +36,12 @@ $(NAME):: $(OBJ)
 
 
 clean:
-	$(RM) $(OBJ) $(DEP) --no-print-directory
-	$(RM) -r $(OBJ_DIR) --no-print-directory
+	$(RM) $(OBJ) $(DEP)
+	$(RM) -r $(OBJ_DIR)
 	@echo "OBJECTS REMOVED   "
 
 fclean: clean
-	$(RM) $(NAME) --no-print-directory
+	$(RM) $(NAME)
 	@echo "EVERYTHING REMOVED   "
 
 re:	fclean all

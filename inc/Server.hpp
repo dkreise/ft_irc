@@ -36,7 +36,7 @@ class Server
         int _sock;
         struct sockaddr_in _info;
         std::vector<struct pollfd> _fds;
-        std::map<int, Client> _clients; // key in the map is a client's sock
+        std::map<int, Client> _clients; // key in the map is a client's socket
         int _nfds;
         std::map<std::string, Channel> _channels; // key in the map is a channel's name
 
@@ -50,6 +50,9 @@ class Server
         void _pass(int& i, std::vector<std::string>& args);
         void _nick(int&i, std::vector<std::string>& args);
         void _user(int& i, std::vector<std::string>& args);
+
+        // sending messages
+        void _privmsg(int& i, std::vector<std::string>& args);
 
         // channel operations
         void _join(int& i, std::vector<std::string>& args);

@@ -74,6 +74,15 @@ bool Client::isRegistered(void) const
     return (this->_isRegistered);
 }
 
+void Client::sendMessage(const std::string& message) const
+{
+    std::string msg = message + "\r\n";
+    send(this->_sock, msg.c_str(), msg.length(), 0);
+}
+
+
+
+
 
 
 

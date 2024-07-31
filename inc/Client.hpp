@@ -25,6 +25,8 @@ class Client
         std::string getBuffer(void) const;
         bool isAllowed(void) const;
         bool isRegistered(void) const;
+
+        void sendMessage(const std::string& message) const;
         
     private:
         int _sock;

@@ -31,7 +31,11 @@ Server::Server(int port, std::string password) : _port(port), _password(password
     }
 
     listen(this->_sock, SOMAXCONN);
-    this->_fds.push_back({this->_sock, POLLIN});
+    struct pollfd pfd;
+    this->_fds.push_back(pfd);
+    this->_fds[0].fd = this->_sock;
+    this->_fds[0].events = POLLIN;
+    //this->_fds.push_back({this->_sock, POLLIN});
 }
 
 void Server::doPollLoop(void)
@@ -79,7 +83,11 @@ void Server::acceptNewClient(void)
     printf("New client connected\n");
 #endif
     this->_clients[sock_cl] = client;
-    this->_fds.push_back({sock_cl, POLLIN});
+    struct pollfd pfd;
+    this->_fds.push_back(pfd);
+    this->_fds[this->_nfds].fd = sock_cl;
+    this->_fds[this->_nfds].events = POLLIN;
+    //this->_fds.push_back({sock_cl, POLLIN});
     this->_nfds ++;
 }
 
@@ -109,10 +117,11 @@ void Server::receiveMessage(int& i)
         buf = this->_clients[this->_fds[i].fd].getBuffer();
         std::vector<std::string> msgs = _parseBuffer(buf);
         this->_clients[this->_fds[i].fd].setBuffer("");
+        int msg_cnt = msgs.size();
 
-        for (int m = 0; m < msgs.size(); m ++)
+        for (int m = 0; m < msg_cnt; m ++)
         {
-            if (m == msgs.size() - 1 && (buf[buf.size() - 1] != '\n' || buf[buf.size() - 2] != '\r'))
+            if (m == msg_cnt - 1 && (buf[buf.size() - 1] != '\n' || buf[buf.size() - 2] != '\r'))
             {
                 this->_clients[this->_fds[i].fd].setBuffer(msgs[m]);
             }
@@ -137,8 +146,8 @@ void Server::receiveMessage(int& i)
 std::vector<std::string> Server::_parseBuffer(std::string& str)
 {
     std::vector<std::string> msgs;
-    int start = 0;
-    int pos = 0;
+    size_t start = 0;
+    size_t pos = 0;
 
 #ifdef DEBUG
     printf("Parsing buffer\n");
