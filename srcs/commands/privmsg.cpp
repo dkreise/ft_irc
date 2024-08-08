@@ -30,7 +30,21 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
         }
         else if (_nickExist(targets[i]))
         {
-            // send to client
+            int sock_target = _findNick(targets[i]);
+            this->_clients[sock_target].sendMessage(text_to_send);
+            // Client target_client = this->_clients[sock_target];
+            // target_client.sendMessage(text_to_send);
         }
     }
+}
+
+int Server::_findNick(std::string& nick)
+{
+    for (int i = 1; i < this->_nfds; i ++)
+    {
+        int sock = this->_fds[i].fd;
+        if (this->_clients[sock].getNickname() == nick)
+            return (sock);
+    }
+    return (-1);
 }

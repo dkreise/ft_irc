@@ -20,7 +20,7 @@ void Server::_nick(int& i, std::vector<std::string>& args)
     if (_nickExist(nick))
     {
         //std::cout << ERR_NICKNAMEINUSE;
-        this->_clients[sock].sendMessage
+        this->_clients[sock].sendMessage(ERR_NICKNAMEINUSE(this->_clients[sock].getNickname(), nick));
         return;
     }
     // check for invalid chars
