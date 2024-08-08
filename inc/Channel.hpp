@@ -11,6 +11,8 @@ local channel, prefix character for this type of channel is ('&', 0x26)
 or a comma (',', 0x2C) (which is used as a list item separator by the protocol)
 */
 
+class Client;
+
 class Channel
 {
     public:
@@ -25,9 +27,13 @@ class Channel
         std::string getName(void) const;
         std::string getTopic(void) const;
         std::string getKey(void) const;
-        bool getMode(char mode) const; // to use only after checking that mode exists!
+        bool getMode(char mode); // to use only after checking that mode exists!
+        int getClientLim(void) const;
+        int getClientCnt(void) const;
+        std::vector<int> getClients(void) const;
 
         void addClient(int fd);
+        //void sendMessage(const std::string& message) const;
     
     private:
         std::string _name;

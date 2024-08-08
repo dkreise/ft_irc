@@ -2,7 +2,7 @@
 
 Channel::Channel(void) {}
 
-Channel::Channel(std::string name) : _name(name)
+Channel::Channel(std::string name) : _name(name), _client_limit(5)
 {
     this->_modes['i'] = false;
     this->_modes['t'] = false;
@@ -46,12 +46,39 @@ std::string Channel::getKey(void) const
     return (this->_key);
 }
 
-bool Channel::getMode(char mode) const
+bool Channel::getMode(char mode)
 {
-    return (this->_modes[mode]);
+    bool status = this->_modes[mode];
+    return (status);
+}
+
+int Channel::getClientLim(void) const
+{
+    return (this->_client_limit);
+}
+
+int Channel::getClientCnt(void) const
+{
+    return (this->_clients.size());
+}
+
+std::vector<int> Channel::getClients(void) const
+{
+    return (this->_clients);
 }
 
 void Channel::addClient(int fd)
 {
     this->_clients.push_back(fd);
 }
+
+// void Channel::rplNamesList(Client& client)
+// {
+//     int n = this->_clients.size();
+
+//     for (int i = 0; i < n; i ++)
+//     {
+//         client.sendMessage(RPL_NAMREPLY(client.getNickname(), this->_name, "", this->_clients[i].getNickname()));
+//     }
+//     client.sendMessage(RPL_ENDOFNAMES(client.getNickname(), this->_name));
+// }

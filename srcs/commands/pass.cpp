@@ -30,5 +30,6 @@ void Server::_pass(int& i, std::vector<std::string>& args)
         this->_fds.erase(this->_fds.begin() + i);
         this->_nfds--;
         i--;
+        return;
     }
 }

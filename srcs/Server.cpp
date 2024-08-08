@@ -184,6 +184,11 @@ void Server::checkMessage(int& i, std::string& msg)
     {
         _join(i, args);
     }
+    else if (!client.isRegistered()) // change with join
+    {
+        client.sendMessage(ERR_NOTREGISTERED(client.getNickname()));
+        return;
+    }
 
 }
 
@@ -202,8 +207,19 @@ std::vector<std::string> Server::_parseMessage(std::string& str, char delim)
     return args;
 }
 
+void Server::sendMessageToChannel(int cl, Channel& chan, const std::string& message) const
+{
+    int n = chan.getClientCnt();
+    std::vector<int> socks = chan.getClients();
 
-
+    for (int i = 0; i < n; i ++)
+    {
+        if (socks[i] != cl)
+        {
+            this->_clients[socks[i]].sendMessage(message);
+        }
+    }
+}
 
 
 

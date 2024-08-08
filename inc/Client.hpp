@@ -25,6 +25,8 @@ class Client
         std::string getBuffer(void) const;
         bool isAllowed(void) const;
         bool isRegistered(void) const;
+        int getChannelCnt(void) const;
+        int getChannelLim(void) const;
 
         void sendMessage(const std::string& message) const;
         
@@ -36,6 +38,7 @@ class Client
         bool _isAllowed;
         bool _isRegistered;
         std::vector<std::string> _channels;
+        int _chan_limit;
 };
 
 #endif

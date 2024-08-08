@@ -13,13 +13,14 @@ void Server::_nick(int& i, std::vector<std::string>& args)
     
     if (args.size() < 2)
     {
-        std::cout << ERR_NONICKNAMEGIVEN;
+        this->_clients[sock].sendMessage(ERR_NONICKNAMEGIVEN(this->_clients[sock].getNickname()));
         return;
     }
     std::string nick = args[1];
-    if (_nickIsUsed(nick))
+    if (_nickExist(nick))
     {
-        std::cout << ERR_NICKNAMEINUSE;
+        //std::cout << ERR_NICKNAMEINUSE;
+        this->_clients[sock].sendMessage
         return;
     }
     // check for invalid chars
@@ -29,7 +30,7 @@ void Server::_nick(int& i, std::vector<std::string>& args)
     printf(":%s NICK %s\n", old_nick.c_str(), nick.c_str());
 }
 
-bool Server::_nickIsUsed(std::string& nick)
+bool Server::_nickExist(std::string& nick)
 {
     for (int i = 1; i < this->_nfds; i ++)
     {

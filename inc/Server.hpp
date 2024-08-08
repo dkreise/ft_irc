@@ -45,6 +45,7 @@ class Server
         std::vector<std::string> _parseBuffer(std::string& str);
         void checkMessage(int& i, std::string& message);
         std::vector<std::string> _parseMessage(std::string& str, char delim);
+        void sendMessageToChannel(int cl, Channel& chan, const std::string& message) const;
         
         // connection messages
         void _pass(int& i, std::vector<std::string>& args);
@@ -62,8 +63,9 @@ class Server
         void _mode();
 
         // help functions
-        bool _nickIsUsed(std::string& nick);
+        bool _nickExist(std::string& nick);
         bool _channelExist(std::string& channel);
+        void _rplNamesList(int client, std::string& channel, std::vector<int>& socks);
         
 };
 

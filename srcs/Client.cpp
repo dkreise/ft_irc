@@ -1,6 +1,6 @@
 #include "../inc/Client.hpp"
 
-Client::Client(int sock) : _sock(sock), _isAllowed(false), _isRegistered(false) {}
+Client::Client(int sock) : _sock(sock), _isAllowed(false), _isRegistered(false), _chan_limit(3) {}
 
 Client::~Client() {}
 
@@ -72,6 +72,16 @@ bool Client::isAllowed(void) const
 bool Client::isRegistered(void) const
 {
     return (this->_isRegistered);
+}
+
+int Client::getChannelCnt(void) const
+{
+    return (this->_channels.size());
+}
+
+int Client::getChannelLim(void) const
+{
+    return (this->_chan_limit);
 }
 
 void Client::sendMessage(const std::string& message) const
