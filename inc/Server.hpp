@@ -67,6 +67,7 @@ class Server
         bool _channelExist(std::string& channel);
         void _rplNamesList(int client, std::string& channel, std::vector<int>& socks);
         int _findNick(std::string& nick);
+        bool _validChannelName(std::string& name);
         
 };
 

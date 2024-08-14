@@ -39,9 +39,10 @@ void Client::setRegisteredStatus(bool isRegistered)
     this->_isRegistered = isRegistered;
 }
 
-void Client::addChannel(std::string& channel)
+void Client::addChannel(std::string& channel, bool admin)
 {
-    this->_channels.push_back(channel);
+    //this->_channels.push_back(channel);
+    this->_channels[channel] = admin;
 }
 
 int Client::getSock(void) const
@@ -82,6 +83,11 @@ int Client::getChannelCnt(void) const
 int Client::getChannelLim(void) const
 {
     return (this->_chan_limit);
+}
+
+bool Client::isAdmin(std::string& channel)
+{
+    return (this->_channels[channel]);
 }
 
 void Client::sendMessage(const std::string& message) const

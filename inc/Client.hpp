@@ -17,7 +17,7 @@ class Client
         void addBuffer(std::string& buffer);
         void setAllowedStatus(bool isAllowed);
         void setRegisteredStatus(bool isRegistered);
-        void addChannel(std::string& channel);
+        void addChannel(std::string& channel, bool admin);
 
         int getSock(void) const;
         std::string getNickname(void) const;
@@ -27,6 +27,7 @@ class Client
         bool isRegistered(void) const;
         int getChannelCnt(void) const;
         int getChannelLim(void) const;
+        bool isAdmin(std::string& channel);
 
         void sendMessage(const std::string& message) const;
         
@@ -37,7 +38,8 @@ class Client
         std::string _buffer;
         bool _isAllowed;
         bool _isRegistered;
-        std::vector<std::string> _channels;
+        //std::vector<std::string> _channels;
+        std::map<std::string, bool> _channels;
         int _chan_limit;
 };
 

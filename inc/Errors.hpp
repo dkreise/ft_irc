@@ -27,6 +27,7 @@
 // privmsg
 #define ERR_NORECIPIENT(client, command) (std::string("411 " + client + " :No recipient given (" + command + ")"))
 #define ERR_NOTEXTTOSEND(client) (std::string("412 " + client + " :No text to send"))
+#define ERR_NOSUCHNICK(client, nickname) (std::string("401 ") + client + " " + nickname + " :No such nick/channel")
 
 #define ERR_NOTREGISTERED(client) (std::string("451 ") + client + " :You have not registered")
 

@@ -25,15 +25,26 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
     {
         if (targets[i][0] == '#' || targets[i][0] == '&')
         {
-            // (can be prefixed ??)
-            // send to channel
+            if (_channelExist(targets[i]))
+            {
+                // check if it can be sent ?
+                sendMessageToChannel(sock, this->_channels[targets[i]], text_to_send);
+            }
+            else
+            {
+                client.sendMessage(ERR_NOSUCHNICK(client.getNickname(), targets[i]));
+                return;
+            }
         }
         else if (_nickExist(targets[i]))
         {
             int sock_target = _findNick(targets[i]);
             this->_clients[sock_target].sendMessage(text_to_send);
-            // Client target_client = this->_clients[sock_target];
-            // target_client.sendMessage(text_to_send);
+        }
+        else
+        {
+            client.sendMessage(ERR_NOSUCHNICK(client.getNickname(), targets[i]));
+            return;
         }
     }
 }
