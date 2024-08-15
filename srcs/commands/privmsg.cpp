@@ -6,6 +6,7 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
     Client client = this->_clients[sock];
     std::vector<std::string> targets;
     std::string text_to_send;
+    std::string full_text;
 
     if (args.size() < 2)
     {
@@ -19,7 +20,12 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
         client.sendMessage(ERR_NOTEXTTOSEND(client.getNickname()));
         return;
     }
-    text_to_send = args[2];
+    text_to_send = args[2]; // combine all args after it!!!!!!!!
+    for (size_t i = 3; i < args.size(); i ++)
+    {
+        text_to_send += " ";
+        text_to_send += args[i];
+    }
 
     for (size_t i = 0; i < targets.size(); i ++)
     {
@@ -28,23 +34,25 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
             if (_channelExist(targets[i]))
             {
                 // check if it can be sent ?
-                sendMessageToChannel(sock, this->_channels[targets[i]], text_to_send);
+                full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
+                sendMessageToChannel(sock, this->_channels[targets[i]], full_text);
             }
             else
             {
                 client.sendMessage(ERR_NOSUCHNICK(client.getNickname(), targets[i]));
-                return;
+                continue;
             }
         }
         else if (_nickExist(targets[i]))
         {
             int sock_target = _findNick(targets[i]);
-            this->_clients[sock_target].sendMessage(text_to_send);
+            full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
+            this->_clients[sock_target].sendMessage(full_text);
         }
         else
         {
             client.sendMessage(ERR_NOSUCHNICK(client.getNickname(), targets[i]));
-            return;
+            continue;
         }
     }
 }

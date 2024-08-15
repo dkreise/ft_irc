@@ -64,12 +64,29 @@ int Channel::getClientCnt(void) const
 
 std::vector<int> Channel::getClients(void) const
 {
+#ifdef DEBUG
+    std::cout << "CLIENTS IN GETCLIENTS: ";
+    for (size_t i = 0; i < this->_clients.size(); i ++)
+    {
+        std::cout << this->_clients[i] << ", ";
+    }
+    std::cout << std::endl;
+#endif
     return (this->_clients);
 }
 
-void Channel::addClient(int fd)
+void Channel::addClient(int& fd)
 {
     this->_clients.push_back(fd);
+
+#ifdef DEBUG
+    std::cout << "CLIENTS IN ADDCLIENT: ";
+    for (size_t i = 0; i < this->_clients.size(); i ++)
+    {
+        std::cout << this->_clients[i] << ", ";
+    }
+    std::cout << std::endl;
+#endif
 }
 
 // void Channel::rplNamesList(Client& client)

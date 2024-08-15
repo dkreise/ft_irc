@@ -6,6 +6,8 @@ void Server::_join(int& i, std::vector<std::string>& args)
     Client client = this->_clients[sock];
     std::vector<std::string> channels;
     std::vector<std::string> keys;
+    Channel channel;
+    std::vector<int> fds;
 
     if (args.size() < 2)
     {
@@ -26,7 +28,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
         {
 #ifdef DEBUG
             std::cout << "Channel exists\n";
-            Channel channel = this->_channels[chan_name];
+            channel = this->_channels[chan_name];
 #endif
             // check for invite only:
             if (channel.getMode('i'))
@@ -55,18 +57,25 @@ void Server::_join(int& i, std::vector<std::string>& args)
                     return;
                 }
             }
+#ifdef DEBUG
+            std::cout << "SOCK TO PUSH::" << sock << std::endl;
+#endif            
             // this->_channels[chan_name].addClient(sock);
-            this->_clients[sock].addChannel(chan_name, false);
-            // show channel topic ?
-            client.sendMessage(RPL_JOIN(client.getNickname(), chan_name)); // or sendChannel ?
-            if (channel.getMode('t'))
-            {
-                client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
-            }
-            // RPL_NAMREPLY, RPL_ENDOFNAMES:
-            std::vector<int> fds = channel.getClients();
-            _rplNamesList(sock, chan_name, fds);
             this->_channels[chan_name].addClient(sock);
+            this->_clients[sock].addChannel(chan_name, false);
+            fds = this->_channels[chan_name].getClients();
+
+            // show channel topic ?
+            // client.sendMessage(RPL_JOIN(client.getNickname(), chan_name)); // or sendChannel ?
+            // if (channel.getMode('t'))
+            // {
+            //     client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
+            // }
+            // // RPL_NAMREPLY, RPL_ENDOFNAMES:
+            // std::vector<int> fds = channel.getClients();
+            
+            
+            // _rplNamesList(sock, chan_name, fds);
         }
         else
         {
@@ -93,8 +102,29 @@ void Server::_join(int& i, std::vector<std::string>& args)
             }
             this->_channels[chan_name] = new_channel;
             this->_clients[sock].addChannel(chan_name, true);
-            client.sendMessage(RPL_JOIN(client.getNickname(), chan_name));
+            fds = new_channel.getClients();
+            channel = new_channel;
+
+            //client.sendMessage(RPL_JOIN(client.getNickname(), chan_name));
+            // show names?
+            // show topic?
         }
+#ifdef DEBUG
+        std::cout << "FDS:: ";
+        for (size_t i = 0; i < fds.size(); i++)
+        {
+            std::cout << fds[i] << ", ";
+        }
+        std::cout << std::endl;
+#endif
+        client.sendMessage(RPL_JOIN(client.getNickname(), chan_name)); // or sendChannel ?
+        if (channel.getMode('t'))
+        {
+            client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
+        }
+        // RPL_NAMREPLY, RPL_ENDOFNAMES:
+        _rplNamesList(sock, chan_name, fds);
+        fds.clear();
     }
 }
 
@@ -112,26 +142,30 @@ bool Server::_channelExist(std::string& channel)
 void Server::_rplNamesList(int client, std::string& channel, std::vector<int>& socks)
 {
     int n = socks.size();
+    std::string nick;
     std::string prefix = "";
 
     std::string client_nick = this->_clients[client].getNickname();
-
+    
     for (int i = 0; i < n; i ++)
     {
-        std::string nick = this->_clients[socks[i]].getNickname();
+        nick = this->_clients[socks[i]].getNickname();
         // prefix ?? :
         if (this->_clients[socks[i]].isAdmin(channel))
         {
-            prefix = "[admin]";
+            prefix = "@";
         }
-        this->_clients[client].sendMessage(RPL_NAMREPLY(client_nick, channel, "", nick));
+        this->_clients[client].sendMessage(RPL_NAMREPLY(client_nick, channel, prefix, nick));
+        prefix = "";
     }
+    nick = "TheBot";
+    this->_clients[client].sendMessage(RPL_NAMREPLY(client_nick, channel, "", nick));
     this->_clients[client].sendMessage(RPL_ENDOFNAMES(client_nick, channel));
 }
 
 bool Server::_validChannelName(std::string& name)
 {
-    int len = name.length();
+    //int len = name.length();
 
     if (name[0] != '#' && name[0] != '&')
     {

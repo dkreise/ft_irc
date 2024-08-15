@@ -32,7 +32,7 @@ class Channel
         int getClientCnt(void) const;
         std::vector<int> getClients(void) const;
 
-        void addClient(int fd);
+        void addClient(int& fd);
         //void sendMessage(const std::string& message) const;
     
     private:

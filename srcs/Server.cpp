@@ -51,12 +51,12 @@ void Server::doPollLoop(void)
         }
         cur_size = this->_nfds;
 #ifdef DEBUG
-        printf("cur size: %i\n", cur_size);
+        //printf("cur size: %i\n", cur_size);
 #endif
         for (int i = 0; i < this->_nfds; i ++)
         {
 #ifdef DEBUG
-            printf("i: %i, nfds: %i\n", i, this->_nfds);
+            //printf("i: %i, nfds: %i\n", i, this->_nfds);
 #endif
             if (this->_fds[i].revents == 0)
             {
@@ -131,8 +131,8 @@ void Server::receiveMessage(int& i)
             }
         }
 #ifdef DEBUG
-        printf("buf in the end of the loop: *%s*\n", this->_clients[this->_fds[i].fd].getBuffer().c_str());
-        printf("number of clients: %i\n", this->_nfds);
+        //printf("buf in the end of the loop: *%s*\n", this->_clients[this->_fds[i].fd].getBuffer().c_str());
+        //printf("number of clients: %i\n", this->_nfds);
 #endif
 
         // for (int j = 1; j < this->_nfds; j++)
@@ -150,7 +150,7 @@ std::vector<std::string> Server::_parseBuffer(std::string& str)
     size_t pos = 0;
 
 #ifdef DEBUG
-    printf("Parsing buffer\n");
+    //printf("Parsing buffer\n");
 #endif
 
     while ((pos = str.find("\r\n", start)) != std::string::npos)
