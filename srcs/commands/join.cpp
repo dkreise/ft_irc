@@ -64,18 +64,6 @@ void Server::_join(int& i, std::vector<std::string>& args)
             this->_channels[chan_name].addClient(sock);
             this->_clients[sock].addChannel(chan_name, false);
             fds = this->_channels[chan_name].getClients();
-
-            // show channel topic ?
-            // client.sendMessage(RPL_JOIN(client.getNickname(), chan_name)); // or sendChannel ?
-            // if (channel.getMode('t'))
-            // {
-            //     client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
-            // }
-            // // RPL_NAMREPLY, RPL_ENDOFNAMES:
-            // std::vector<int> fds = channel.getClients();
-            
-            
-            // _rplNamesList(sock, chan_name, fds);
         }
         else
         {
@@ -104,10 +92,6 @@ void Server::_join(int& i, std::vector<std::string>& args)
             this->_clients[sock].addChannel(chan_name, true);
             fds = new_channel.getClients();
             channel = new_channel;
-
-            //client.sendMessage(RPL_JOIN(client.getNickname(), chan_name));
-            // show names?
-            // show topic?
         }
 #ifdef DEBUG
         std::cout << "FDS:: ";
@@ -165,11 +149,10 @@ void Server::_rplNamesList(int client, std::string& channel, std::vector<int>& s
 
 bool Server::_validChannelName(std::string& name)
 {
-    //int len = name.length();
-
     if (name[0] != '#' && name[0] != '&')
     {
         return (false);
     }
+    // some other chars?
     return (true);
 }

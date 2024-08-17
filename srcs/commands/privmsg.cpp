@@ -49,6 +49,12 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
             full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
             this->_clients[sock_target].sendMessage(full_text);
         }
+        else if (targets[i] == "TheBot")
+        {
+            // Bot response:
+            full_text = ":TheBot PRIVMSG " + client.getNickname() + ": I am listening to you..";
+            this->_clients[sock].sendMessage(full_text);
+        }
         else
         {
             client.sendMessage(ERR_NOSUCHNICK(client.getNickname(), targets[i]));

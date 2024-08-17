@@ -17,21 +17,32 @@ void Server::_nick(int& i, std::vector<std::string>& args)
         return;
     }
     std::string nick = args[1];
+    for (size_t i = 2; i < args.size(); i ++)
+    {
+        nick += " ";
+        nick += args[i];
+    }
     if (_nickExist(nick))
     {
-        //std::cout << ERR_NICKNAMEINUSE;
         this->_clients[sock].sendMessage(ERR_NICKNAMEINUSE(this->_clients[sock].getNickname(), nick));
         return;
     }
-    // check for invalid chars
+    if (!_validNick(nick) || args.size() > 2) // meaning it has space as a char
+    {
+        this->_clients[sock].sendMessage(ERR_ERRONEUSNICKNAME(this->_clients[sock].getNickname(), nick));
+        return;
+    }
     std::string old_nick = this->_clients[sock].getNickname();
     this->_clients[sock].setNickname(nick);
-    // send to users not server:
-    printf(":%s NICK %s\n", old_nick.c_str(), nick.c_str());
+    std::string msg = ":" + old_nick + " NICK " + nick;
+    this->_clients[sock].sendMessage(msg);
+    // do we need to inform others?
 }
 
 bool Server::_nickExist(std::string& nick)
 {
+    if (nick == "TheBot")
+        return (true);
     for (int i = 1; i < this->_nfds; i ++)
     {
         int sock = this->_fds[i].fd;
@@ -39,4 +50,16 @@ bool Server::_nickExist(std::string& nick)
             return (true);
     }
     return (false);
+}
+
+bool Server::_validNick(std::string& nick)
+{
+    if (nick[0] == '$' || nick[0] == ':' || nick[0] == '&' || nick[0] == '#')
+        return (false);
+    for (size_t i = 0; i < nick.length(); i ++)
+    {
+        if (nick[i] == ',' || nick[i] == '*' || nick[i] == '!' || nick[i] == '?' || nick[i] == '@' || nick[i] == '.' || nick[i] == ' ')
+            return (false);
+    }
+    return (true);
 }
