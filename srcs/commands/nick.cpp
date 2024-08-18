@@ -17,6 +17,11 @@ void Server::_nick(int& i, std::vector<std::string>& args)
         return;
     }
     std::string nick = args[1];
+    if (nick == "")
+    {
+        this->_clients[sock].sendMessage(ERR_NONICKNAMEGIVEN(this->_clients[sock].getNickname()));
+        return;
+    }
     for (size_t i = 2; i < args.size(); i ++)
     {
         nick += " ";
@@ -27,7 +32,7 @@ void Server::_nick(int& i, std::vector<std::string>& args)
         this->_clients[sock].sendMessage(ERR_NICKNAMEINUSE(this->_clients[sock].getNickname(), nick));
         return;
     }
-    if (!_validNick(nick) || args.size() > 2) // meaning it has space as a char
+    if (!_validNick(nick))
     {
         this->_clients[sock].sendMessage(ERR_ERRONEUSNICKNAME(this->_clients[sock].getNickname(), nick));
         return;

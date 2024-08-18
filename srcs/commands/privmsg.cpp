@@ -46,6 +46,7 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
         else if (_nickExist(targets[i]))
         {
             int sock_target = _findNick(targets[i]);
+            // if target is not registered fully yet -> continue (?)
             full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
             this->_clients[sock_target].sendMessage(full_text);
         }
