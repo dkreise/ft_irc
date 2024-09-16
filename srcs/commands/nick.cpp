@@ -42,6 +42,16 @@ void Server::_nick(int& i, std::vector<std::string>& args)
     std::string msg = ":" + old_nick + " NICK " + nick;
     this->_clients[sock].sendMessage(msg);
     // do we need to inform others?
+
+    if (this->_clients[sock].isRegistered() || this->_clients[sock].getUsername() == "")
+    {
+        return;
+    }
+    this->_clients[sock].setRegisteredStatus(true);
+    this->_clients[sock].sendMessage(RPL_WELCOME(nick));
+    this->_clients[sock].sendMessage(RPL_YOURHOST(nick));
+    this->_clients[sock].sendMessage(RPL_CREATED(nick));
+    this->_clients[sock].sendMessage(RPL_MYINFO(nick));
 }
 
 bool Server::_nickExist(std::string& nick)

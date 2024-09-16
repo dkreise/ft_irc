@@ -19,6 +19,11 @@ void Client::setUsername(std::string& username)
     this->_username = username;
 }
 
+void Client::setRealname(std::string& realname)
+{
+    this->_realname = realname;
+}
+
 void Client::setBuffer(std::string buffer)
 {
     this->_buffer = buffer;
@@ -58,6 +63,11 @@ std::string Client::getNickname(void) const
 std::string Client::getUsername(void) const
 {
     return (this->_username);
+}
+
+std::string Client::getRealname(void) const
+{
+    return (this->_realname);
 }
 
 std::string Client::getBuffer(void) const

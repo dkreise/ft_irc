@@ -13,6 +13,7 @@ class Client
         void setSock(int& sock);
         void setNickname(std::string& nickname);
         void setUsername(std::string& username);
+        void setRealname(std::string& realname);
         void setBuffer(std::string buffer);
         void addBuffer(std::string& buffer);
         void setAllowedStatus(bool isAllowed);
@@ -22,6 +23,7 @@ class Client
         int getSock(void) const;
         std::string getNickname(void) const;
         std::string getUsername(void) const;
+        std::string getRealname(void) const;
         std::string getBuffer(void) const;
         bool isAllowed(void) const;
         bool isRegistered(void) const;
@@ -35,9 +37,10 @@ class Client
         int _sock;
         std::string _nickname;
         std::string _username;
+        std::string _realname;
         std::string _buffer;
-        bool _isAllowed;
-        bool _isRegistered;
+        bool _isAllowed; // if has passed pass command properly
+        bool _isRegistered; // if it has used nick and/or (??) name command
         //std::vector<std::string> _channels;
         std::map<std::string, bool> _channels;
         int _chan_limit;

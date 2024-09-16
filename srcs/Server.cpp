@@ -40,7 +40,7 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 
 void Server::doPollLoop(void)
 {
-    int cur_size;
+    //int cur_size;
 
     while (1)
     {
@@ -49,7 +49,7 @@ void Server::doPollLoop(void)
             std::cerr << "Error poll" << std::endl;
             //return 1; // throw exception instead ?
         }
-        cur_size = this->_nfds;
+        //cur_size = this->_nfds;
 #ifdef DEBUG
         //printf("cur size: %i\n", cur_size);
 #endif
@@ -172,27 +172,43 @@ void Server::checkMessage(int& i, std::string& msg)
 
     args = _parseMessage(msg, ' ');
 
-    if (args[0] == "PASS")
+    std::string cmds[5] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN"};
+	void (Server::*f[5])(int &client_fd, std::vector<std::string> &args) = {&Server::_join, &Server::_nick, &Server::_user, &Server::_privmsg, &Server::_pass};
+
+    for (int j = 0; j < 5; j++)
     {
-        _pass(i, args);
+        if (args[0] == cmds[j])
+        {
+            if ((j > 0 && !client.isAllowed()) || (j > 1 && !client.isRegistered()))
+            {
+                client.sendMessage(ERR_NOTREGISTERED(client.getNickname()));
+                return;
+            }
+            (this->*f[j])(i, args);
+            return;
+        }
     }
-    else if (args[0] == "NICK")
-    {
-        _nick(i, args);
-    }
-    else if (args[0] == "JOIN")
-    {
-        _join(i, args);
-    }
-    else if (args[0] == "PRIVMSG")
-    {
-        _privmsg(i, args);
-    }
-    else if (!client.isRegistered()) // change with join
-    {
-        client.sendMessage(ERR_NOTREGISTERED(client.getNickname()));
-        return;
-    }
+    // if (args[0] == "PASS")
+    // {
+    //     _pass(i, args);
+    // }
+    // else if (args[0] == "NICK")
+    // {
+    //     _nick(i, args);
+    // }
+    // else if (args[0] == "JOIN")
+    // {
+    //     _join(i, args);
+    // }
+    // else if (args[0] == "PRIVMSG")
+    // {
+    //     _privmsg(i, args);
+    // }
+    // else if (!client.isRegistered()) // change with join
+    // {
+    //     client.sendMessage(ERR_NOTREGISTERED(client.getNickname()));
+    //     return;
+    // }
 
 }
 
