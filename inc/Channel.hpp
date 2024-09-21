@@ -38,6 +38,7 @@ class Channel
     private:
         std::string _name;
         std::string _topic;
+        // std::pair
         std::string _key;
         std::map<char, bool> _modes;
         std::vector<int> _clients; // fds of clients

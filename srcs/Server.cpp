@@ -172,15 +172,16 @@ void Server::checkMessage(int& i, std::string& msg)
 
     args = _parseMessage(msg, ' ');
 
-    std::string cmds[5] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN"};
-	void (Server::*f[5])(int &client_fd, std::vector<std::string> &args) = {&Server::_join, &Server::_nick, &Server::_user, &Server::_privmsg, &Server::_pass};
+    std::string cmds[6] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "TOPIC"};
+	void (Server::*f[6])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_privmsg, &Server::_join, &Server::_topic};
 
-    for (int j = 0; j < 5; j++)
+    for (int j = 0; j < 6; j++)
     {
         if (args[0] == cmds[j])
         {
-            if ((j > 0 && !client.isAllowed()) || (j > 1 && !client.isRegistered()))
+            if ((j > 0 && !client.isAllowed()) || (j > 2 && !client.isRegistered()))
             {
+                client.sendMessage("we are here");
                 client.sendMessage(ERR_NOTREGISTERED(client.getNickname()));
                 return;
             }

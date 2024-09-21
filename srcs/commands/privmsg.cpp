@@ -20,7 +20,7 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
         client.sendMessage(ERR_NOTEXTTOSEND(client.getNickname()));
         return;
     }
-    text_to_send = args[2]; // combine all args after it!!!!!!!!
+    text_to_send = args[2];
     for (size_t i = 3; i < args.size(); i ++)
     {
         text_to_send += " ";
@@ -29,6 +29,7 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
 
     for (size_t i = 0; i < targets.size(); i ++)
     {
+        printf("target[%lu] = **%s**\n", i, targets[i].c_str());
         if (targets[i][0] == '#' || targets[i][0] == '&')
         {
             if (_channelExist(targets[i]))
@@ -43,19 +44,19 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
                 continue;
             }
         }
-        else if (_nickExist(targets[i]))
-        {
-            int sock_target = _findNick(targets[i]);
-            // if target is not registered fully yet -> continue (?)
-            full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
-            this->_clients[sock_target].sendMessage(full_text);
-        }
         else if (targets[i] == "TheBot")
         {
             // Bot response:
             full_text = ":TheBot PRIVMSG " + client.getNickname() + ": I am listening to you..";
             this->_clients[sock].sendMessage(full_text);
         }
+        else if (_nickExist(targets[i]))
+        {
+            int sock_target = _findNick(targets[i]);
+            // if target is not registered fully yet -> continue (?)
+            full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
+            this->_clients[sock_target].sendMessage(full_text);
+        } 
         else
         {
             client.sendMessage(ERR_NOSUCHNICK(client.getNickname(), targets[i]));

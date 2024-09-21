@@ -59,7 +59,7 @@ class Server
         void _join(int& i, std::vector<std::string>& args);
         void _kick();
         void _invite();
-        void _topic();
+        void _topic(int& i, std::vector<std::string>& args);
         void _mode();
 
         // help functions
