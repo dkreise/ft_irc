@@ -3,7 +3,7 @@
 void Server::_join(int& i, std::vector<std::string>& args)
 {
     int sock = this->_fds[i].fd;
-    Client client = this->_clients[sock];
+    Client& client = this->_clients[sock];
     std::vector<std::string> channels;
     std::vector<std::string> keys;
     Channel channel;
