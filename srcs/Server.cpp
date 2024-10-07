@@ -153,10 +153,10 @@ void Server::checkMessage(int& i, std::string& msg)
     if (args.size() == 0)
         return;
 
-    std::string cmds[6] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "TOPIC"};
-	void (Server::*f[6])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_privmsg, &Server::_join, &Server::_topic};
+    std::string cmds[7] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC"};
+	void (Server::*f[7])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic};
 
-    for (int j = 0; j < 6; j++)
+    for (int j = 0; j < 7; j++)
     {
         if (args[0] == cmds[j])
         {
@@ -225,7 +225,14 @@ void Server::sendMessageToChannel(int cl, Channel& chan, const std::string& mess
     }
 }
 
+void Server::_ping(int& i, std::vector<std::string>& args)
+{
+    int sock = this->_fds[i].fd;
+    Client& client = this->_clients[sock];
 
+    // std::cout << "Pong:" << args[1] << std::endl;
+    client.sendMessage(PONG(args[1]));
+}
 
 
 

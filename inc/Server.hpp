@@ -63,6 +63,7 @@ class Server
         void _mode();
 
         // help functions
+        void _ping(int& i, std::vector<std::string>& args);
         bool _nickExist(std::string& nick);
         bool _channelExist(std::string& channel);
         void _rplNamesList(int client, std::string& channel, std::vector<int>& socks);

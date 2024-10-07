@@ -34,7 +34,13 @@ class Channel
 
         void addClient(int& fd);
         //void sendMessage(const std::string& message) const;
+
+        bool isClientInChannel(int clntfd);
     
+        bool isOperator(int clntfd);
+        void addOperator(int clntfd);
+        void removeOperator(int clntfd);
+
     private:
         std::string _name;
         std::string _topic;
@@ -43,6 +49,9 @@ class Channel
         std::map<char, bool> _modes;
         std::vector<int> _clients; // fds of clients
         int _client_limit;
+
+        std::vector<int> _operators;// fds of clients operators
+
 };
 
 #endif

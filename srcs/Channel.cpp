@@ -2,7 +2,7 @@
 
 Channel::Channel(void) {}
 
-Channel::Channel(std::string name) : _name(name), _client_limit(5)
+Channel::Channel(std::string name) : _name(name), _topic(""), _client_limit(5)
 {
     this->_modes['i'] = false;
     this->_modes['t'] = false;
@@ -99,3 +99,47 @@ void Channel::addClient(int& fd)
 //     }
 //     client.sendMessage(RPL_ENDOFNAMES(client.getNickname(), this->_name));
 // }
+
+
+bool Channel::isClientInChannel(int clntfd)
+{
+    std::vector<int>::iterator it;
+
+	for (it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (*it == clntfd)
+			return true;
+	}
+	return false;
+}
+
+bool Channel::isOperator(int clntfd)
+{
+    std::vector<int>::iterator it;
+
+	for (it = _operators.begin(); it != _operators.end(); it++)
+	{
+		if (*it == clntfd)
+			return true;
+	}
+	return false;
+}
+
+void Channel::addOperator(int clntfd)
+{
+    _operators.push_back(clntfd);
+}
+
+void Channel::removeOperator(int clntfd)
+{
+    std::vector<int>::iterator it;
+
+	for (it = _operators.begin(); it != _operators.end(); it++)
+	{
+		if (*it == clntfd)
+		{
+            _operators.erase(it);
+            return ;
+        }	
+	}
+}
