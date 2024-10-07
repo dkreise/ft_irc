@@ -43,6 +43,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
                 return;
             }
             // check if too many clients in channel
+            std::cout << "channel count-->" << channel.getClientCnt() << std::endl;
             if (channel.getClientCnt() >= channel.getClientLim())
             {
                 client.sendMessage(ERR_CHANNELISFULL(client.getNickname(), chan_name));
@@ -101,7 +102,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
         }
         std::cout << std::endl;
 #endif
-        client.sendMessage(RPL_JOIN(client.getNickname(), chan_name)); // or sendChannel ?
+        client.sendMessage(RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name)); // or sendChannel ?
         if (channel.getMode('t'))
         {
             client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
@@ -127,23 +128,21 @@ void Server::_rplNamesList(int client, std::string& channel, std::vector<int>& s
 {
     int n = socks.size();
     std::string nick;
-    std::string prefix = "";
+    std::string userlist("");
 
     std::string client_nick = this->_clients[client].getNickname();
     
     for (int i = 0; i < n; i ++)
     {
         nick = this->_clients[socks[i]].getNickname();
-        // prefix ?? :
+
         if (this->_clients[socks[i]].isAdmin(channel))
-        {
-            prefix = "@";
-        }
-        this->_clients[client].sendMessage(RPL_NAMREPLY(client_nick, channel, prefix, nick));
-        prefix = "";
+            userlist += "@" + nick + " ";
+        else
+            userlist += nick + " ";
     }
-    nick = "TheBot";
-    this->_clients[client].sendMessage(RPL_NAMREPLY(client_nick, channel, "", nick));
+    userlist += "@TheBot";
+    this->_clients[client].sendMessage(RPL_NAMREPLY(client_nick, channel, userlist));
     this->_clients[client].sendMessage(RPL_ENDOFNAMES(client_nick, channel));
 }
 

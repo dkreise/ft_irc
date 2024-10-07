@@ -17,6 +17,7 @@ void Server::_user(int& i, std::vector<std::string>& args)
     }
     
     std::string username = args[1];
+    std::string hostname = args[2];
     std::string realname = args[4];
     for (size_t i = 5; i < args.size(); i ++)
     {
@@ -25,6 +26,7 @@ void Server::_user(int& i, std::vector<std::string>& args)
     }
 
     this->_clients[sock].setUsername(username);
+    this->_clients[sock].setHostname(hostname);
     this->_clients[sock].setRealname(realname);
     if (nick == "")
     {

@@ -35,7 +35,7 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
             if (_channelExist(targets[i]))
             {
                 // check if it can be sent ?
-                full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
+                full_text = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + " PRIVMSG " + targets[i].c_str() + " " + text_to_send;
                 sendMessageToChannel(sock, this->_channels[targets[i]], full_text);
             }
             else

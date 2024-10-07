@@ -18,7 +18,7 @@
 #include "Channel.hpp"
 #include "Errors.hpp"
 
-#define DEBUG
+// #define DEBUG
 
 class Client;
 class Channel;

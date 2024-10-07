@@ -40,34 +40,18 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 
 void Server::doPollLoop(void)
 {
-    //int cur_size;
-
     while (1)
     {
-#ifdef DEBUG
-        printf("before poll\n");
-#endif
         if (poll(this->_fds.data(), this->_nfds, -1) < 0) // set timeout !!
         {
             std::cerr << "Error poll" << std::endl;
-            //return 1; // throw exception instead ?
+            continue ;
         }
-        //cur_size = this->_nfds;
-#ifdef DEBUG
-        printf("after poll\n");
-#endif
+
         for (int i = 0; i < this->_nfds; i ++)
         {
-#ifdef DEBUG
-            printf("i: %i, nfds: %i\n", i, this->_nfds);
-#endif
-            if (this->_fds[i].revents == 0)
-            {
-#ifdef DEBUG
-                printf("zero revents\n");
-#endif                
+            if (this->_fds[i].revents == 0)        
                 continue;
-            }
             if (this->_fds[i].fd == this->_sock)
             {
                 acceptNewClient();
@@ -76,12 +60,8 @@ void Server::doPollLoop(void)
             {
                 receiveMessage(i);
             }
-#ifdef DEBUG
-            else
-                printf("nothing from herererere\n");
-#endif
         }
-        printf("for loop ended\n");
+        //printf("for loop ended\n");
     }
 }
 
@@ -104,20 +84,12 @@ void Server::acceptNewClient(void)
 
 void Server::receiveMessage(int& i)
 {
-#ifdef DEBUG
-        printf("RECEIVING\n");
-#endif
     char buffer[1024] = {0};
     memset(buffer, 0, 1024);
     size_t bytes_read = read(this->_fds[i].fd, buffer, 1024);
-#ifdef DEBUG
-    printf("bytes_read = %lu\n", bytes_read);
-#endif
+
     if (bytes_read <= 0)
     {
-#ifdef DEBUG
-        printf("client%d bytes_read <= 0 \n", i);
-#endif
         close(this->_fds[i].fd);
         this->_fds.erase(this->_fds.begin() + i);
         this->_nfds  --;
@@ -125,23 +97,14 @@ void Server::receiveMessage(int& i)
     }
     else
     {
-#ifdef DEBUG
-        printf("from client%d: %s", i, buffer);
-        for (int k = 0; buffer[k] != 0; k ++)
-        {
-            printf("%d\n", buffer[k]);
-        }
-#endif
         std::string buf(buffer, bytes_read);
+    
         this->_clients[this->_fds[i].fd].addBuffer(buf);
         buf = this->_clients[this->_fds[i].fd].getBuffer();
         std::vector<std::string> msgs = _parseBuffer(buf);
         this->_clients[this->_fds[i].fd].setBuffer("");
+
         int msg_cnt = msgs.size();
-#ifdef DEBUG
-        printf("buf.size = %lu\n", buf.size());
-        printf("msgs[0] = **%s**\n", msgs[0].c_str());
-#endif
 
         for (int m = 0; m < msg_cnt; m ++)
         {
@@ -154,16 +117,6 @@ void Server::receiveMessage(int& i)
                 checkMessage(i, msgs[m]);
             }
         }
-#ifdef DEBUG
-        printf("buf in the end of the loop: **%s**\n", this->_clients[this->_fds[i].fd].getBuffer().c_str());
-        //printf("number of clients: %i\n", this->_nfds);
-#endif
-
-        // for (int j = 1; j < this->_nfds; j++)
-        // {
-        //     if (j != i)
-        //         write(this->_fds[j].fd, buffer, strlen(buffer));
-        // }
     }
 }
 
@@ -193,6 +146,8 @@ void Server::checkMessage(int& i, std::string& msg)
 {
     std::vector<std::string> args;
     Client client = this->_clients[this->_fds[i].fd];
+
+    std::cout << "----->" << msg << "<------" << std::endl;
 
     args = _parseMessage(msg, ' ');
     if (args.size() == 0)

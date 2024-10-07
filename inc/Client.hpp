@@ -13,6 +13,7 @@ class Client
         void setSock(int& sock);
         void setNickname(std::string& nickname);
         void setUsername(std::string& username);
+        void setHostname(std::string& hostname);
         void setRealname(std::string& realname);
         void setBuffer(std::string buffer);
         void addBuffer(std::string& buffer);
@@ -23,6 +24,7 @@ class Client
         int getSock(void) const;
         std::string getNickname(void) const;
         std::string getUsername(void) const;
+        std::string getHostname(void) const;
         std::string getRealname(void) const;
         std::string getBuffer(void) const;
         bool isAllowed(void) const;
@@ -37,6 +39,7 @@ class Client
         int _sock;
         std::string _nickname;
         std::string _username;
+        std::string _hostname;
         std::string _realname;
         std::string _buffer;
         bool _isAllowed; // if has passed pass command properly
