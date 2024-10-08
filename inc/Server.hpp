@@ -57,7 +57,7 @@ class Server
 
         // channel operations
         void _join(int& i, std::vector<std::string>& args);
-        void _kick();
+        void _kick(int& i, std::vector<std::string>& args);
         void _invite();
         void _topic(int& i, std::vector<std::string>& args);
         void _mode();
@@ -67,9 +67,11 @@ class Server
         bool _nickExist(std::string& nick);
         bool _channelExist(std::string& channel);
         void _rplNamesList(int client, std::string& channel, std::vector<int>& socks);
-        int _findNick(std::string& nick);
+        int  _findNick(std::string& nick);
         bool _validChannelName(std::string& name);
         bool _validNick(std::string& nick);
+
+        // void _removeClntFromChan(int cltsock, std::string& channelname);
         
 };
 

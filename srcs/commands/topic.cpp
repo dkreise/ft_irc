@@ -9,6 +9,8 @@ void Server::_topic(int& i, std::vector<std::string>& args)
     std::string channelname = args[1];
     Channel channel;
 
+    if (args.size() < 2)
+        return client.sendMessage(ERR_NEEDMOREPARAMS(nick, "TOPIC"));
     // std::vector<std::string>::iterator it;
 
     // for (it = args.begin(); it != args.end(); it++)

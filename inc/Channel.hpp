@@ -41,6 +41,11 @@ class Channel
         void addOperator(int clntfd);
         void removeOperator(int clntfd);
 
+        void removeClient(int& cltsock);
+
+        void removeInvited(int& cltsock);
+        void addInvited(int& cltsock);
+
     private:
         std::string _name;
         std::string _topic;
@@ -51,6 +56,7 @@ class Channel
         int _client_limit;
 
         std::vector<int> _operators;// fds of clients operators
+        std::vector<int> _invited; // fds of invited clients
 
 };
 

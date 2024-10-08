@@ -34,6 +34,8 @@ class Client
         bool isAdmin(std::string& channel);
 
         void sendMessage(const std::string& message) const;
+
+        void removeFromChan(std::string& channelname); 
         
     private:
         int _sock;
@@ -47,6 +49,7 @@ class Client
         //std::vector<std::string> _channels;
         std::map<std::string, bool> _channels;
         int _chan_limit;
+
 };
 
 #endif

@@ -143,3 +143,36 @@ void Channel::removeOperator(int clntfd)
         }	
 	}
 }
+
+void Channel::removeClient(int& clntsock)
+{
+    std::vector<int>::iterator it;
+
+	for (it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (*it == clntsock)
+		{
+            _clients.erase(it);
+            return ;
+        }	
+	}
+}
+
+void Channel::removeInvited(int& clntsock)
+{
+    std::vector<int>::iterator it;
+
+	for (it = _invited.begin(); it != _invited.end(); it++)
+	{
+		if (*it == clntsock)
+		{
+            _invited.erase(it);
+            return ;
+        }	
+	}
+}
+
+void Channel::addInvited(int& clntsock)
+{
+     _invited.push_back(clntsock);
+}

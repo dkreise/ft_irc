@@ -147,16 +147,16 @@ void Server::checkMessage(int& i, std::string& msg)
     std::vector<std::string> args;
     Client client = this->_clients[this->_fds[i].fd];
 
-    std::cout << "----->" << msg << "<------" << std::endl;
+    std::cout << "->" << msg << "<-" << std::endl;
 
     args = _parseMessage(msg, ' ');
     if (args.size() == 0)
         return;
 
-    std::string cmds[7] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC"};
-	void (Server::*f[7])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic};
+    std::string cmds[8] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC", "KICK"};
+	void (Server::*f[8])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic, &Server::_kick};
 
-    for (int j = 0; j < 7; j++)
+    for (int j = 0; j < 8; j++)
     {
         if (args[0] == cmds[j])
         {
@@ -234,7 +234,10 @@ void Server::_ping(int& i, std::vector<std::string>& args)
     client.sendMessage(PONG(args[1]));
 }
 
+// void Server::_removeClntFromChan(int cltsock, std::string& channelname)
+// {
 
+// }
 
 
 

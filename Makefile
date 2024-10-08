@@ -9,7 +9,7 @@ CFLAGS = -Werror -Wextra -Wall -g -fsanitize=address -std=c++98
 #########
 FILES = main Server Client Channel
 
-FILES += pass nick user join privmsg topic 
+FILES += pass nick user join privmsg topic kick
 
 SRC = $(addsuffix .cpp, $(FILES))
 
@@ -32,7 +32,7 @@ all:
 
 $(NAME):: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-	@echo "EVERYTHING DONE   "⠀⠀⠀⠀⠀⠀⠀
+	@echo "EVERYTHING DONE   "
 
 
 clean:

@@ -116,8 +116,10 @@ void Client::sendMessage(const std::string& message) const
     send(this->_sock, msg.c_str(), msg.length(), 0);
 }
 
-
-
+void Client::removeFromChan(std::string& channelname)
+{
+    _channels.erase(channelname);
+}
 
 
 
