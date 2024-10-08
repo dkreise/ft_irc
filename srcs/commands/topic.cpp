@@ -40,7 +40,7 @@ void Server::_topic(int& i, std::vector<std::string>& args)
         else if (newTopic == ":" || newTopic == " ")
             channel.setTopic("");
         else
-            channel.setTopic(newTopic.substr(1, newTopic.size()));
+            channel.setTopic(newTopic.substr(1, newTopic.size())); //Check in nc
 
         sendMessageToChannel(sock, channel, RPL_TOPIC(nick, channelname, channel.getTopic()));
         client.sendMessage(RPL_TOPIC(nick, channelname, channel.getTopic()));

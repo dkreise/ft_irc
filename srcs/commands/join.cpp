@@ -103,7 +103,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
         }
         std::cout << std::endl;
 #endif
-        client.sendMessage(RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name)); // or sendChannel ?
+        sendMessageToChannel(sock, channel, RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name)); // or sendChannel ?
         if (channel.getMode('t'))
         {
             client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));

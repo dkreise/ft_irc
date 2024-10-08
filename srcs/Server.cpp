@@ -153,10 +153,10 @@ void Server::checkMessage(int& i, std::string& msg)
     if (args.size() == 0)
         return;
 
-    std::string cmds[8] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC", "KICK"};
-	void (Server::*f[8])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic, &Server::_kick};
+    std::string cmds[9] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC", "KICK", "INVITE"};
+	void (Server::*f[9])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic, &Server::_kick, &Server::_invite};
 
-    for (int j = 0; j < 8; j++)
+    for (int j = 0; j < 9; j++)
     {
         if (args[0] == cmds[j])
         {

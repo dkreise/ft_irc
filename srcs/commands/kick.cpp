@@ -3,7 +3,7 @@
 void Server::_kick(int& i, std::vector<std::string>& args)
 {
 	int sock = this->_fds[i].fd;
-    Client client = this->_clients[sock];
+    Client& client = this->_clients[sock];
     std::string nick = client.getNickname();
 	std::string kickMsg = "No reason";
 

@@ -58,7 +58,7 @@ class Server
         // channel operations
         void _join(int& i, std::vector<std::string>& args);
         void _kick(int& i, std::vector<std::string>& args);
-        void _invite();
+        void _invite(int& i, std::vector<std::string>& args);
         void _topic(int& i, std::vector<std::string>& args);
         void _mode();
 
