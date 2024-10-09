@@ -18,7 +18,7 @@ void Server::_user(int& i, std::vector<std::string>& args)
     
     std::string username = args[1];
     std::string hostname = args[2];
-    std::string realname = args[4];
+    std::string realname = args[4].substr(1);
     for (size_t i = 5; i < args.size(); i ++)
     {
         realname += " ";

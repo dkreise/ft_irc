@@ -18,7 +18,7 @@
 #define ERR_BANNEDFROMCHAN(client, channel) (std::string("474 ") + client + " " + channel + " :Cannot join channel (+b)")
 #define ERR_CHANNELISFULL(client, channel) (std::string("471 ") + client + " " + channel + " :Cannot join channel (+l)")
 #define ERR_BADCHANMASK(channel) (std::string("476 ") + channel + " :Bad Channel Mask")
-#define RPL_JOIN(client, name, host, channel) (std::string(":") + client + "!" + name + "@" + host + " JOIN " + channel)
+#define RPL_JOIN(client, name, host, channel) (std::string(":") + client + "!" + name + "@" + host + " JOIN :" + channel)
 #define RPL_NAMREPLY(client, channel, userlist) (std::string(":localhost 353 ") + client + " = " + channel + " :" + userlist)
 #define RPL_ENDOFNAMES(client, channel) (std::string(":localhost 366 ") + client + " " + channel + " :End of /NAMES list")
 

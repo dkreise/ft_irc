@@ -59,16 +59,9 @@ void Server::_join(int& i, std::vector<std::string>& args)
                     return;
                 }
             }
-#ifdef DEBUG
-            std::cout << "SOCK TO PUSH::" << sock << std::endl;
-#endif            
-            // this->_channels[chan_name].addClient(sock);
             this->_channels[chan_name].addClient(sock);
             this->_clients[sock].addChannel(chan_name, false);
             fds = this->_channels[chan_name].getClients();
-
-            //if ()
-            //client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
         }
         else
         {

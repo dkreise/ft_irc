@@ -202,6 +202,8 @@ std::string Channel::getmodeString()
         modestr += "t";
     if (_modes['l'])
         modestr += "l";
+    if (_modes['k'])
+        modestr += "k";
 
     if (modestr.size() == 1)
         return "";
