@@ -6,27 +6,30 @@ void Server::_mode(int& i, std::vector<std::string>& args)
     Client& client = this->_clients[sock];
     std::string nick = client.getNickname();
 
-	std::vector<std::string>::iterator it;
-    for (it = args.begin(); it != args.end(); it++)
-    {
-        std::cout << "-->" << *it << "<--" << std::endl;
-    }
+	// std::vector<std::string>::iterator it;
+    // for (it = args.begin(); it != args.end(); it++)
+    // {
+    //     std::cout << "-->" << *it << "<--" << std::endl;
+    // }
 
 	if (args[1][0] != '#' && args[1][0] != '&')
-		return client.sendMessage(ERR_BADCHANMASK(args[1]));
+		return ;
 
 	std::string channelname = args[1];
 	if(!_channelExist(channelname))
 		return client.sendMessage(ERR_NOSUCHCHANNEL(nick, channelname));
 	Channel& channel = this->_channels[channelname];
 
-	if (args.size() == 2) //consult modes
+	if (args.size() <= 2) //consult modes
 	{
 		std::string modestring = channel.getmodeString();
 
 		std::string modeReply = ":localhost " + RPL_CHANNELMODEIS(client.getNickname(), channel.getName(), modestring);
-    	client.sendMessage(modeReply);
+    	return client.sendMessage(modeReply);
 	}
+
+	if (!channel.isOperator(sock))
+		return client.sendMessage(ERR_CHANOPRIVSNEEDED(nick, channelname));
 
 	if (args[2][0] != '-' && args[2][0] != '+')
 		return ;//error??
@@ -84,7 +87,6 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 				else
 					channel.addOperator(targetsock);
 			}
-			
 			break ;
 		}
 
@@ -96,6 +98,7 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 			channel.setMode('l', flagMode);
 			if (flagMode)
 				channel.setClientLimit(limit);
+			break ;
 		}
 
 		default:

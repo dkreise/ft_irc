@@ -29,7 +29,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
             std::cout << "Channel exists\n";
             channel = this->_channels[chan_name];
 
-            if (channel.getMode('i') && )
+            if (channel.getMode('i') && !channel.isInvited(sock))
             {
                 client.sendMessage(ERR_INVITEONLYCHAN(client.getNickname(), chan_name));
                 return;
@@ -64,7 +64,8 @@ void Server::_join(int& i, std::vector<std::string>& args)
             this->_clients[sock].addChannel(chan_name, false);
             fds = this->_channels[chan_name].getClients();
 
-            client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
+            //if ()
+            //client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
         }
         else
         {
@@ -104,11 +105,10 @@ void Server::_join(int& i, std::vector<std::string>& args)
         std::cout << std::endl;
 #endif
         sendMessageToChannel(sock, channel, RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name)); // or sendChannel ?
-        if (channel.getMode('t'))
+        if (channel.getTopic() != "")
         {
             client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
         }
-        // RPL_NAMREPLY, RPL_ENDOFNAMES:
         _rplNamesList(sock, chan_name, fds);
         fds.clear();
     }

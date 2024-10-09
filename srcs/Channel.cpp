@@ -182,6 +182,16 @@ void Channel::addInvited(int& clntsock)
      _invited.push_back(clntsock);
 }
 
+bool Channel::isInvited(int& cltsock)
+{
+    for (size_t i = 0; i < _invited.size(); i++)
+    {
+        if (_invited[i] == cltsock)
+            return true;
+    }
+    return false;
+}
+
 std::string Channel::getmodeString()
 {
     std::string modestr = "+";

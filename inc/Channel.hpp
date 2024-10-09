@@ -46,6 +46,7 @@ class Channel
 
         void removeInvited(int& cltsock);
         void addInvited(int& cltsock);
+        bool isInvited(int& cltsock);
 
         std::string getmodeString();
 
