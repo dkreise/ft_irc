@@ -2,7 +2,7 @@
 
 Channel::Channel(void) {}
 
-Channel::Channel(std::string name) : _name(name), _topic(""), _client_limit(5)
+Channel::Channel(std::string name) : _name(name), _topic(""), _client_limit(CLIENT_LIMIT)
 {
     this->_modes['i'] = false;
     this->_modes['t'] = true;

@@ -7,12 +7,6 @@ void Server::_kick(int& i, std::vector<std::string>& args)
     std::string nick = client.getNickname();
 	std::string kickMsg = "No reason";
 
-	// std::vector<std::string>::iterator it;
-    // for (it = args.begin(); it != args.end(); it++)
-    // {
-    //     std::cout << "-->" << *it << "<--" << std::endl;
-    // }
-
 	if (args.size() < 2) //3??
         return client.sendMessage(ERR_NEEDMOREPARAMS(client.getNickname(), "KICK"));
 	if (args.size() >= 4)
@@ -28,10 +22,6 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 		return client.sendMessage(ERR_CHANOPRIVSNEEDED(nick, channelname));
 
 	std::vector<std::string> targets = _parseMessage(args[2], ',');
-	// for (std::vector<std::string>::iterator i = targets.begin(); i != targets.end(); i++)
-	// {
-	// 	std::cout << "target -->" << *i << std::endl;
-	// }
 	
 	for (size_t j = 0; j < targets.size(); j++)
 	{
@@ -54,5 +44,4 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 	}
 	// if (channel is empty)
 	// 	erase?
-	
 }
