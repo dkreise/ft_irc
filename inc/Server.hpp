@@ -18,7 +18,7 @@
 #include "Channel.hpp"
 #include "Errors.hpp"
 
-// #define DEBUG
+#define CLIENT_LIMIT 100
 
 class Client;
 class Channel;

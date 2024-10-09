@@ -93,11 +93,15 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 		case 'l':
 		{
 			int limit = atoi(args[j].c_str());
+			if (limit > CLIENT_LIMIT)
+				limit = CLIENT_LIMIT;
 			++j;
 
 			channel.setMode('l', flagMode);
 			if (flagMode)
 				channel.setClientLimit(limit);
+			else
+				channel.setClientLimit(CLIENT_LIMIT);
 			break ;
 		}
 
@@ -105,7 +109,9 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 			break;
 		}
 	}
+	
 	std::string modestring = channel.getmodeString();
+	std::cout << "modstring-->" << modestring << std::endl;
 
 	std::string modeReply = ":localhost " + RPL_CHANNELMODEIS(client.getNickname(), channel.getName(), modestring);
     client.sendMessage(modeReply);

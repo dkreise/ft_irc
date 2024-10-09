@@ -1,6 +1,6 @@
 #include "../inc/Client.hpp"
 
-Client::Client(int sock) : _sock(sock), _isAllowed(false), _isRegistered(false), _chan_limit(3) {}
+Client::Client(int sock) : _sock(sock), _isAllowed(false), _isRegistered(false), _chan_limit(MAX_CHANNEL) {}
 
 Client::~Client() {}
 

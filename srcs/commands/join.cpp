@@ -34,6 +34,9 @@ void Server::_join(int& i, std::vector<std::string>& args)
                 client.sendMessage(ERR_INVITEONLYCHAN(client.getNickname(), chan_name));
                 return;
             }
+            if (channel.getMode('l') && channel.getClientCnt() >= channel.getClientLim())
+                return client.sendMessage(ERR_CHANNELISFULL(client.getNickname(), chan_name));
+
             // check if too many channels for client
             if (client.getChannelCnt() >= client.getChannelLim())
             {

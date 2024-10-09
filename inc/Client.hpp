@@ -3,6 +3,8 @@
 
 #include "Server.hpp"
 
+#define MAX_CHANNEL 5
+
 class Client
 {
     public:

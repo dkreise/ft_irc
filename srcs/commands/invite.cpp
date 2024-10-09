@@ -39,6 +39,7 @@ void Server::_invite(int& i, std::vector<std::string>& args)
 
 	Client& target = _clients[targetsock];
 
+	channel.addInvited(targetsock);
 	std::string targetMsg = nick + " INVITE " + targetnick + " " + channelname;
 	target.sendMessage(targetMsg);
 
