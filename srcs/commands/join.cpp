@@ -29,7 +29,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
             std::cout << "Channel exists\n";
             channel = this->_channels[chan_name];
 
-            if (channel.getMode('i'))
+            if (channel.getMode('i') && )
             {
                 client.sendMessage(ERR_INVITEONLYCHAN(client.getNickname(), chan_name));
                 return;

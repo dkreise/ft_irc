@@ -13,7 +13,7 @@ void Server::_mode(int& i, std::vector<std::string>& args)
     }
 
 	if (args[1][0] != '#' && args[1][0] != '&')
-		return ; //error???
+		return client.sendMessage(ERR_BADCHANMASK(args[1]));
 
 	std::string channelname = args[1];
 	if(!_channelExist(channelname))
@@ -101,7 +101,7 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 		default:
 			break;
 		}
-	
+	}
 	std::string modestring = channel.getmodeString();
 
 	std::string modeReply = ":localhost " + RPL_CHANNELMODEIS(client.getNickname(), channel.getName(), modestring);
