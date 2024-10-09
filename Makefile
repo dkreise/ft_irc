@@ -9,7 +9,7 @@ CFLAGS = -Werror -Wextra -Wall -g -fsanitize=address -std=c++98
 #########
 FILES = main Server Client Channel
 
-FILES += pass nick user join privmsg topic kick invite
+FILES += pass nick user join privmsg topic kick invite mode
 
 SRC = $(addsuffix .cpp, $(FILES))
 

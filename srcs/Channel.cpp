@@ -5,9 +5,9 @@ Channel::Channel(void) {}
 Channel::Channel(std::string name) : _name(name), _topic(""), _client_limit(5)
 {
     this->_modes['i'] = false;
-    this->_modes['t'] = false;
-    this->_modes['k'] = false;
-    this->_modes['o'] = false;
+    this->_modes['t'] = true;
+    //this->_modes['k'] = false;
+    //this->_modes['o'] = false;
     this->_modes['l'] = false;
 }
 
@@ -29,6 +29,11 @@ void Channel::setKey(std::string key)
 void Channel::setMode(char mode, bool status)
 {
     this->_modes[mode] = status;
+}
+
+void Channel::setClientLimit(int limit)
+{
+    this->_client_limit = limit;
 }
 
 std::string Channel::getName(void) const
@@ -175,4 +180,20 @@ void Channel::removeInvited(int& clntsock)
 void Channel::addInvited(int& clntsock)
 {
      _invited.push_back(clntsock);
+}
+
+std::string Channel::getmodeString()
+{
+    std::string modestr = "+";
+
+    if (_modes[0])
+        modestr += "i";
+    if (_modes[1])
+        modestr += "t";
+    if (_modes[2])
+        modestr += "l";
+
+    if (modestr == "+")
+        return "";
+    return modestr;
 }

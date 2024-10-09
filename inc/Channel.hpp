@@ -23,6 +23,7 @@ class Channel
         void setTopic(std::string topic);
         void setKey(std::string key);
         void setMode(char mode, bool status); // to use only after checking that mode exists!
+        void setClientLimit(int limit);
 
         std::string getName(void) const;
         std::string getTopic(void) const;
@@ -45,6 +46,8 @@ class Channel
 
         void removeInvited(int& cltsock);
         void addInvited(int& cltsock);
+
+        std::string getmodeString();
 
     private:
         std::string _name;

@@ -153,16 +153,16 @@ void Server::checkMessage(int& i, std::string& msg)
     if (args.size() == 0)
         return;
 
-    std::string cmds[9] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC", "KICK", "INVITE"};
-	void (Server::*f[9])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic, &Server::_kick, &Server::_invite};
+    std::string cmds[10] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC", "KICK", "INVITE", "MODE"};
+	void (Server::*f[10])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic, &Server::_kick, &Server::_invite, &Server::_mode};
 
-    for (int j = 0; j < 9; j++)
+    for (int j = 0; j < 10; j++)
     {
         if (args[0] == cmds[j])
         {
             if ((j > 0 && !client.isAllowed()) || (j > 2 && !client.isRegistered()))
             {
-                client.sendMessage("we are here");
+                //client.sendMessage("we are here");
                 client.sendMessage(ERR_NOTREGISTERED(client.getNickname()));
                 return;
             }

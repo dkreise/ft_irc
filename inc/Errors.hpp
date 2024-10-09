@@ -55,7 +55,7 @@
 #define ERR_INVITEONLYCHAN(client, channel) (std::string("473 ") + client + " " + channel + " Cannot join channel (+i)")
 
 // mode
-#define RPL_CHANNELMODEIS(client, channel, modestring, modearg) (std::string("324 ") + client + " " + channel + " " + modestring + " " + modearg)
+#define RPL_CHANNELMODEIS(client, channel, modestring) (std::string("324 ") + client + " " + channel + " " + modestring)
 #define ERR_INVALIDKEY(client, channel) (std::string("525 ") + client + " " + channel + " Key its not well formed")
 
 #endif

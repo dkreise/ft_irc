@@ -60,7 +60,7 @@ class Server
         void _kick(int& i, std::vector<std::string>& args);
         void _invite(int& i, std::vector<std::string>& args);
         void _topic(int& i, std::vector<std::string>& args);
-        void _mode();
+        void _mode(int& i, std::vector<std::string>& args);
 
         // help functions
         void _ping(int& i, std::vector<std::string>& args);

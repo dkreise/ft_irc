@@ -6,11 +6,11 @@ void Server::_invite(int& i, std::vector<std::string>& args)
     Client& client = this->_clients[sock];
     std::string nick = client.getNickname();
 
-	std::vector<std::string>::iterator it;
-    for (it = args.begin(); it != args.end(); it++)
-    {
-        std::cout << "-->" << *it << "<--" << std::endl;
-    }
+	// std::vector<std::string>::iterator it;
+    // for (it = args.begin(); it != args.end(); it++)
+    // {
+    //     std::cout << "-->" << *it << "<--" << std::endl;
+    // }
 
 	if (args.size() < 2) //3 ???? ?
         return client.sendMessage(ERR_NEEDMOREPARAMS(client.getNickname(), "INVITE"));
