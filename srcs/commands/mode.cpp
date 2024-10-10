@@ -62,8 +62,8 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 
 		case 'k':
 		{
-			if (j > args.size() && flagMode)
-				return ;
+			if (j >= args.size() && flagMode)
+				break ;
 			std::string key = args[j];
 			++j;
 
@@ -77,8 +77,8 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 
 		case 'o':
 		{
-			if (j > args.size() && flagMode)
-				return ;
+			if (j >= args.size() && flagMode)
+				break ;
 			std::string target = args[j];
 			++j;
 			int targetsock = _findNick(target);
@@ -100,8 +100,8 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 
 		case 'l':
 		{
-			if (j > args.size() && flagMode)
-				return ;
+			if (j >= args.size() && flagMode)
+				break ;
 			int limit = atoi(args[j].c_str());
 			if (limit > CLIENT_LIMIT)
 				limit = CLIENT_LIMIT;

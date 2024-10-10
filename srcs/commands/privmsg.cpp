@@ -37,8 +37,10 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
                 std::string channelname = targets[i];
                 Channel& chan = _channels[channelname];
                 if (!chan.isClientInChannel(sock))
-                    return client.sendMessage(ERR_CANNOTSENDTOCHAN(client.getNickname(), channelname));
-
+                {
+                    client.sendMessage(ERR_CANNOTSENDTOCHAN(client.getNickname(), channelname));
+                    continue;
+                }
                 full_text = ":" + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + " PRIVMSG " + targets[i].c_str() + " " + text_to_send;
                 sendMessageToChannel(sock, this->_channels[targets[i]], full_text);
             }

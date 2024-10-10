@@ -17,9 +17,8 @@ void Server::_join(int& i, std::vector<std::string>& args)
     bool are_keys = args.size() > 2 ? true : false;
     channels = _parseMessage(args[1], ',');
     if (are_keys)
-    {
         keys = _parseMessage(args[2], ',');
-    }
+
     int n = channels.size();
     for (int i = 0; i < n; i ++)
     {
@@ -32,23 +31,25 @@ void Server::_join(int& i, std::vector<std::string>& args)
             if (channel.getMode('i') && !channel.isInvited(sock))
             {
                 client.sendMessage(ERR_INVITEONLYCHAN(client.getNickname(), chan_name));
-                return;
+                continue;
             }
             if (channel.getMode('l') && channel.getClientCnt() >= channel.getClientLim())
-                return client.sendMessage(ERR_CHANNELISFULL(client.getNickname(), chan_name));
-
+            {
+                client.sendMessage(ERR_CHANNELISFULL(client.getNickname(), chan_name));
+                continue;
+            }
             // check if too many channels for client
             if (client.getChannelCnt() >= client.getChannelLim())
             {
                 client.sendMessage(ERR_TOOMANYCHANNELS(client.getNickname(), chan_name));
-                return;
+                continue;
             }
             // check if too many clients in channel
             // std::cout << "channel count-->" << channel.getClientCnt() << std::endl;
             if (channel.getClientCnt() >= channel.getClientLim())
             {
                 client.sendMessage(ERR_CHANNELISFULL(client.getNickname(), chan_name));
-                return;
+                continue;
             }
             // check the key if it is required for channel
             if (channel.getMode('k'))
@@ -56,7 +57,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
                 if (!are_keys || i >= (int)keys.size() || keys[i] != channel.getKey())
                 {
                     client.sendMessage(ERR_BADCHANNELKEY(client.getNickname(), chan_name));
-                    return;
+                    continue;
                 }
             }
             this->_channels[chan_name].addClient(sock);
@@ -68,13 +69,13 @@ void Server::_join(int& i, std::vector<std::string>& args)
             if (client.getChannelCnt() >= client.getChannelLim())
             {
                 client.sendMessage(ERR_TOOMANYCHANNELS(client.getNickname(), chan_name));
-                return;
+                continue;
             }
             // check for first char and valid chars:
             if (!_validChannelName(chan_name))
             {
                 client.sendMessage(ERR_BADCHANMASK(chan_name));
-                return;
+                continue;
             }
             Channel new_channel(chan_name);
             new_channel.addClient(sock);
@@ -91,9 +92,8 @@ void Server::_join(int& i, std::vector<std::string>& args)
         }
         sendMessageToChannel(sock, channel, RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name)); // or sendChannel ?
         if (channel.getTopic() != "")
-        {
             client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
-        }
+        
         _rplNamesList(sock, chan_name, fds);
         fds.clear();
     }
