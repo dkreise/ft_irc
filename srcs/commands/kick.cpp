@@ -28,11 +28,22 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 		int		targetSock = _findNick(targets[j]);
 		Client	targetClnt = _clients[targetSock];
 
+		if (targets[j] == "TheBot")
+		{
+			std::string aux = ":TheBot PRIVMSG " + client.getNickname() + ": You cannot kick me!!..";
+            client.sendMessage(aux);
+			continue;
+		}
 		if (!_nickExist(targets[j]))
-			return client.sendMessage(ERR_NOSUCHNICK(nick, targets[j].c_str()));
+		{
+			client.sendMessage(ERR_NOSUCHNICK(nick, targets[j].c_str()));
+			continue;
+		}
 		if (!channel.isClientInChannel(targetSock))
-			return client.sendMessage(ERR_USERNOTINCHANNEL(nick, targets[j].c_str(), channelname));
-
+		{
+			client.sendMessage(ERR_USERNOTINCHANNEL(nick, targets[j].c_str(), channelname));
+			continue;
+		}
 		std::string msg = KICK_MSG(nick, client.getUsername(), client.getHostname(), channelname, targetClnt.getNickname(), kickMsg);
 		sendMessageToChannel(targetSock, channel, msg);
 		targetClnt.sendMessage(msg);// i think its okay??
@@ -42,6 +53,8 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 
 		channel.removeInvited(targetSock);
 	}
-	// if (channel is empty)
-	// 	erase?
+	if (channel.isEmpty())
+	{
+		this->_channels.erase(channelname);
+	}
 }

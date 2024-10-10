@@ -38,7 +38,7 @@ Server::Server(int port, std::string password) : _port(port), _password(password
     this->_fds[0].fd = this->_sock;
     this->_fds[0].events = POLLIN;
     this->_fds[0].revents = 0;
-    //this->_fds.push_back({this->_sock, POLLIN});
+
 }
 
 void Server::doPollLoop(void)
@@ -110,9 +110,12 @@ void Server::receiveMessage(int& i)
         this->_clients[this->_fds[i].fd].setBuffer("");
 
         int msg_cnt = msgs.size();
+        int i_cur = i;
 
         for (int m = 0; m < msg_cnt; m ++)
         {
+            if (i_cur != i) // for checking if the client is still alive
+                return;
             if (m == msg_cnt - 1 && (buf[buf.size() - 1] != '\n' || buf[buf.size() - 2] != '\r'))
             {
                 this->_clients[this->_fds[i].fd].setBuffer(msgs[m]);
@@ -150,7 +153,8 @@ std::vector<std::string> Server::_parseBuffer(std::string& str)
 void Server::checkMessage(int& i, std::string& msg)
 {
     std::vector<std::string> args;
-    Client client = this->_clients[this->_fds[i].fd];
+    int sock = this->_fds[i].fd;
+    Client& client = this->_clients[sock];
 
     std::cout << "->" << msg << "<-" << std::endl;
 
@@ -163,6 +167,16 @@ void Server::checkMessage(int& i, std::string& msg)
 
     for (int j = 0; j < 10; j++)
     {
+        if (j > 0 && !client.isAllowed())
+        {
+            //client.sendMessage(ERR_PASSWDMISMATCH(""));
+            close(sock);
+            this->_clients.erase(sock);
+            this->_fds.erase(this->_fds.begin() + i);
+            this->_nfds--;
+            i--;
+            return;
+        }
         if (args[0] == cmds[j])
         {
             if ((j > 0 && !client.isAllowed()) || (j > 2 && !client.isRegistered()))

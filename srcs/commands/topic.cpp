@@ -36,6 +36,11 @@ void Server::_topic(int& i, std::vector<std::string>& args)
     else
     {
         std::string newTopic = args[2];
+        for (size_t i = 3; i < args.size(); i ++)
+        {
+            newTopic += " ";
+            newTopic += args[i];
+        }
         if (channel.getMode('t') && !channel.isOperator(sock))
         {
             std::cout << "~~~~~>" << ERR_CHANOPRIVSNEEDED(nick, channelname) << std::endl;

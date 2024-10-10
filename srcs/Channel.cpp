@@ -209,3 +209,8 @@ std::string Channel::getmodeString()
         return "";
     return modestr;
 }
+
+bool Channel::isEmpty(void)
+{
+    return this->_clients.empty();
+}

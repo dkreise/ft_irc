@@ -32,7 +32,7 @@
 #define RPL_WELCOME(client) (std::string("001 ") + client + " :Welcome to the Internet Relay Network," + client + "!")
 #define RPL_YOURHOST(client) (std::string("002 ") + client + " :Your host is localhost, running version 1.0")
 #define RPL_CREATED(client) (std::string("003 ") + client + " :This server was created today")
-#define RPL_MYINFO(client) (std::string("004 ") + client + " localhost 1.0 -availableusermodes- -availablechannelmodes-")
+#define RPL_MYINFO(client) (std::string("004 ") + client + " localhost 1.0 itkol")
 #define ERR_NOTREGISTERED(client) (std::string("451 ") + client + " :You have not registered")
 
 // ping pong
@@ -47,7 +47,7 @@
 
 // topic
 #define RPL_NOTOPIC(client, channel) (std::string("331 ") + client + " " + channel + " No topic is set")
-#define RPL_TOPIC(client, channel, topic) (std::string("332 ") + client + " " + channel + " :" + topic)
+#define RPL_TOPIC(client, channel, topic) (std::string("332 ") + client + " " + channel + " " + topic)
 
 // invite
 #define ERR_USERONCHANNEL(client, nick, channel) (std::string("443 ") + client + " " + nick + " " + channel + " :is already on channel")
