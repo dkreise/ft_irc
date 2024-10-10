@@ -32,6 +32,7 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 		{
 			std::string aux = ":TheBot PRIVMSG " + client.getNickname() + ": You cannot kick me!!..";
             client.sendMessage(aux);
+			sendMessageToChannel(-1, channel, aux);
 			continue;
 		}
 		if (!_nickExist(targets[j]))
