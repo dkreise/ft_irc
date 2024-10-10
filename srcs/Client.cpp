@@ -110,6 +110,11 @@ bool Client::isAdmin(std::string& channel)
     return (this->_channels[channel]);
 }
 
+void Client::setAdmin(std::string& channel, bool admin)
+{
+    this->_channels[channel] = admin;
+}
+
 void Client::sendMessage(const std::string& message) const
 {
     std::string msg = message + "\r\n";

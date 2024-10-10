@@ -34,6 +34,7 @@ class Client
         int getChannelCnt(void) const;
         int getChannelLim(void) const;
         bool isAdmin(std::string& channel);
+        void setAdmin(std::string& channel, bool admin);
 
         void sendMessage(const std::string& message) const;
 

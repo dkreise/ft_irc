@@ -6,6 +6,7 @@ void Server::_mode(int& i, std::vector<std::string>& args)
     Client& client = this->_clients[sock];
     std::string nick = client.getNickname();
 
+	//std::cout << "arg.size()->" << args.size() << std::endl; 
 	if (args.size() < 2)
 		return client.sendMessage(ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 
@@ -33,7 +34,7 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 
 
 	std::string modes = args[2];
-	int j = 3; //problem???
+	size_t j = 3; //problem???
 
 	bool		flagMode = false;
 	while (modes.empty() == false)
@@ -61,6 +62,8 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 
 		case 'k':
 		{
+			if (j > args.size() && flagMode)
+				return ;
 			std::string key = args[j];
 			++j;
 
@@ -74,21 +77,31 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 
 		case 'o':
 		{
+			if (j > args.size() && flagMode)
+				return ;
 			std::string target = args[j];
 			++j;
 			int targetsock = _findNick(target);
 			if (targetsock != -1)
 			{
 				if (!flagMode)
+				{
 					channel.removeOperator(targetsock);
+					this->_clients[targetsock].setAdmin(channelname, false);
+				}
 				else
+				{
 					channel.addOperator(targetsock);
+					this->_clients[targetsock].setAdmin(channelname, true);
+				}
 			}
 			break ;
 		}
 
 		case 'l':
 		{
+			if (j > args.size() && flagMode)
+				return ;
 			int limit = atoi(args[j].c_str());
 			if (limit > CLIENT_LIMIT)
 				limit = CLIENT_LIMIT;

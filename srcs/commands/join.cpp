@@ -65,9 +65,6 @@ void Server::_join(int& i, std::vector<std::string>& args)
         }
         else
         {
-#ifdef DEBUG
-            std::cout << "Channel does not exist, creating a new one\n";
-#endif
             if (client.getChannelCnt() >= client.getChannelLim())
             {
                 client.sendMessage(ERR_TOOMANYCHANNELS(client.getNickname(), chan_name));
@@ -92,14 +89,6 @@ void Server::_join(int& i, std::vector<std::string>& args)
             fds = new_channel.getClients();
             channel = new_channel;
         }
-#ifdef DEBUG
-        std::cout << "FDS:: ";
-        for (size_t i = 0; i < fds.size(); i++)
-        {
-            std::cout << fds[i] << ", ";
-        }
-        std::cout << std::endl;
-#endif
         sendMessageToChannel(sock, channel, RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name)); // or sendChannel ?
         if (channel.getTopic() != "")
         {

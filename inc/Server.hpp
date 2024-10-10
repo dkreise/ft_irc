@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <string>
 #include <sstream>
+#include <csignal>
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "Errors.hpp"
@@ -70,6 +71,8 @@ class Server
         int  _findNick(std::string& nick);
         bool _validChannelName(std::string& name);
         bool _validNick(std::string& nick);
+        void _closeAndClean();
+        static void	_signalHandler(int signum);
 
         // void _removeClntFromChan(int cltsock, std::string& channelname);
         

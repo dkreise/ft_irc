@@ -1,5 +1,7 @@
 #include "../inc/Server.hpp"
 
+bool g_signal = false;
+
 Server::Server(int port, std::string password) : _port(port), _password(password), _nfds(1)
 {
     this->_sock = socket(AF_INET, SOCK_STREAM, 0); // protect
@@ -35,14 +37,17 @@ Server::Server(int port, std::string password) : _port(port), _password(password
     this->_fds.push_back(pfd);
     this->_fds[0].fd = this->_sock;
     this->_fds[0].events = POLLIN;
+    this->_fds[0].revents = 0;
     //this->_fds.push_back({this->_sock, POLLIN});
 }
 
 void Server::doPollLoop(void)
 {
-    while (1)
+    signal(SIGINT, Server::_signalHandler);
+    while (g_signal == false)
     {
-        if (poll(this->_fds.data(), this->_nfds, -1) < 0) // set timeout !!
+        int pollCount = poll(this->_fds.data(), this->_nfds, -1);
+        if (pollCount == -1 && g_signal == false) // set timeout !!
         {
             std::cerr << "Error poll" << std::endl;
             continue ;
@@ -61,8 +66,8 @@ void Server::doPollLoop(void)
                 receiveMessage(i);
             }
         }
-        //printf("for loop ended\n");
     }
+    _closeAndClean();
 }
 
 void Server::acceptNewClient(void)
@@ -78,7 +83,7 @@ void Server::acceptNewClient(void)
     this->_fds.push_back(pfd);
     this->_fds[this->_nfds].fd = sock_cl;
     this->_fds[this->_nfds].events = POLLIN;
-    //this->_fds.push_back({sock_cl, POLLIN});
+    this->_fds[this->_nfds].revents = 0;
     this->_nfds ++;
 }
 
@@ -162,7 +167,7 @@ void Server::checkMessage(int& i, std::string& msg)
         {
             if ((j > 0 && !client.isAllowed()) || (j > 2 && !client.isRegistered()))
             {
-                //client.sendMessage("we are here");
+                client.sendMessage("we are here");
                 client.sendMessage(ERR_NOTREGISTERED(client.getNickname()));
                 return;
             }
@@ -218,10 +223,7 @@ void Server::sendMessageToChannel(int cl, Channel& chan, const std::string& mess
     for (int i = 0; i < n; i ++)
     {
         if (socks[i] != cl)
-        {
-            
             this->_clients[socks[i]].sendMessage(message);
-        }
     }
 }
 
@@ -232,6 +234,31 @@ void Server::_ping(int& i, std::vector<std::string>& args)
 
     // std::cout << "Pong:" << args[1] << std::endl;
     client.sendMessage(PONG(args[1]));
+}
+
+void	Server::_closeAndClean()
+{
+	std::cout << "losing Server^" << std::endl;
+
+	if (_sock != -1)
+		close(_sock);
+	
+	std::map<int, Client>::iterator it = _clients.begin();
+	while (it != _clients.end())
+	{
+		if (it->first != -1)
+			close(it->first);
+		it++;
+	}
+	
+	_clients.clear();
+	_fds.clear();
+}
+
+void	Server::_signalHandler(int signum)
+{
+	(void)signum;
+	g_signal = true;
 }
 
 // void Server::_removeClntFromChan(int cltsock, std::string& channelname)
