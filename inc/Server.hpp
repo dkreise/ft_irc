@@ -73,9 +73,6 @@ class Server
         bool _validNick(std::string& nick);
         void _closeAndClean();
         static void	_signalHandler(int signum);
-
-        // void _removeClntFromChan(int cltsock, std::string& channelname);
-        
 };
 
 #endif

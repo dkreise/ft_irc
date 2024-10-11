@@ -6,7 +6,6 @@ void Server::_mode(int& i, std::vector<std::string>& args)
     Client& client = this->_clients[sock];
     std::string nick = client.getNickname();
 
-	//std::cout << "arg.size()->" << args.size() << std::endl; 
 	if (args.size() < 2)
 		return client.sendMessage(ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 
@@ -30,11 +29,10 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 		return client.sendMessage(ERR_CHANOPRIVSNEEDED(nick, channelname));
 
 	if (args[2][0] != '-' && args[2][0] != '+')
-		return ;//error??
-
+		return ;
 
 	std::string modes = args[2];
-	size_t j = 3; //problem???
+	size_t j = 3;
 
 	bool		flagMode = false;
 	while (modes.empty() == false)
@@ -121,7 +119,6 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 	}
 	
 	std::string modestring = channel.getmodeString();
-	std::cout << "modstring-->" << modestring << std::endl;
 
 	std::string modeReply = ":localhost " + RPL_CHANNELMODEIS(client.getNickname(), channel.getName(), modestring);
     client.sendMessage(modeReply);

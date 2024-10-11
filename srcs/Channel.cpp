@@ -6,8 +6,6 @@ Channel::Channel(std::string name) : _name(name), _topic(""), _client_limit(CLIE
 {
     this->_modes['i'] = false;
     this->_modes['t'] = true;
-    //this->_modes['k'] = false;
-    //this->_modes['o'] = false;
     this->_modes['l'] = false;
 }
 
@@ -69,42 +67,13 @@ int Channel::getClientCnt(void) const
 
 std::vector<int> Channel::getClients(void) const
 {
-#ifdef DEBUG
-    std::cout << "CLIENTS IN GETCLIENTS: ";
-    for (size_t i = 0; i < this->_clients.size(); i ++)
-    {
-        std::cout << this->_clients[i] << ", ";
-    }
-    std::cout << std::endl;
-#endif
     return (this->_clients);
 }
 
 void Channel::addClient(int& fd)
 {
     this->_clients.push_back(fd);
-
-#ifdef DEBUG
-    std::cout << "CLIENTS IN ADDCLIENT: ";
-    for (size_t i = 0; i < this->_clients.size(); i ++)
-    {
-        std::cout << this->_clients[i] << ", ";
-    }
-    std::cout << std::endl;
-#endif
 }
-
-// void Channel::rplNamesList(Client& client)
-// {
-//     int n = this->_clients.size();
-
-//     for (int i = 0; i < n; i ++)
-//     {
-//         client.sendMessage(RPL_NAMREPLY(client.getNickname(), this->_name, "", this->_clients[i].getNickname()));
-//     }
-//     client.sendMessage(RPL_ENDOFNAMES(client.getNickname(), this->_name));
-// }
-
 
 bool Channel::isClientInChannel(int clntfd)
 {

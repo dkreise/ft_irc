@@ -29,9 +29,8 @@ void Server::_user(int& i, std::vector<std::string>& args)
     this->_clients[sock].setHostname(hostname);
     this->_clients[sock].setRealname(realname);
     if (nick == "")
-    {
         return;
-    }
+
     this->_clients[sock].setRegisteredStatus(true);
     this->_clients[sock].sendMessage(RPL_WELCOME(nick));
     this->_clients[sock].sendMessage(RPL_YOURHOST(nick));

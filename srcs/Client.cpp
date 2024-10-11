@@ -51,7 +51,6 @@ void Client::setRegisteredStatus(bool isRegistered)
 
 void Client::addChannel(std::string& channel, bool admin)
 {
-    //this->_channels.push_back(channel);
     this->_channels[channel] = admin;
 }
 

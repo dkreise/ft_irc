@@ -25,7 +25,6 @@ void Server::_join(int& i, std::vector<std::string>& args)
         std::string chan_name = channels[i];
         if (_channelExist(chan_name))
         {
-            std::cout << "Channel exists\n";
             channel = this->_channels[chan_name];
 
             if (channel.getMode('i') && !channel.isInvited(sock))
@@ -45,7 +44,6 @@ void Server::_join(int& i, std::vector<std::string>& args)
                 continue;
             }
             // check if too many clients in channel
-            // std::cout << "channel count-->" << channel.getClientCnt() << std::endl;
             if (channel.getClientCnt() >= channel.getClientLim())
             {
                 client.sendMessage(ERR_CHANNELISFULL(client.getNickname(), chan_name));
@@ -135,9 +133,6 @@ void Server::_rplNamesList(int client, std::string& channel, std::vector<int>& s
 bool Server::_validChannelName(std::string& name)
 {
     if (name[0] != '#' && name[0] != '&')
-    {
         return (false);
-    }
-    // some other chars? ','??
     return (true);
 }

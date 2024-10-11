@@ -7,7 +7,7 @@ void Server::_kick(int& i, std::vector<std::string>& args)
     std::string nick = client.getNickname();
 	std::string kickMsg = "No reason";
 
-	if (args.size() < 2) //3??
+	if (args.size() < 2)
         return client.sendMessage(ERR_NEEDMOREPARAMS(client.getNickname(), "KICK"));
 	if (args.size() >= 4)
 		kickMsg = args[3];
@@ -47,7 +47,7 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 		}
 		std::string msg = KICK_MSG(nick, client.getUsername(), client.getHostname(), channelname, targetClnt.getNickname(), kickMsg);
 		sendMessageToChannel(targetSock, channel, msg);
-		targetClnt.sendMessage(msg);// i think its okay??
+		targetClnt.sendMessage(msg);
 
 		targetClnt.removeFromChan(channelname);
 		channel.removeClient(targetSock);
@@ -55,7 +55,5 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 		channel.removeInvited(targetSock);
 	}
 	if (channel.isEmpty())
-	{
 		this->_channels.erase(channelname);
-	}
 }

@@ -18,10 +18,7 @@ void Server::_pass(int& i, std::vector<std::string>& args)
     else if (args[1] == this->_password)
     {
         this->_clients[sock].setAllowedStatus(true);
-        this->_clients[sock].setBuffer(""); // is not neccessary there..?
-#ifdef DEBUG
-        printf("Password match\n");
-#endif
+        this->_clients[sock].setBuffer("");
     }
     else
     {

@@ -49,7 +49,6 @@ class Client
         std::string _buffer;
         bool _isAllowed; // if has passed pass command properly
         bool _isRegistered; // if it has used nick and/or (??) name command
-        //std::vector<std::string> _channels;
         std::map<std::string, bool> _channels;
         int _chan_limit;
 

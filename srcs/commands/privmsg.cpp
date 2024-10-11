@@ -29,7 +29,6 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
 
     for (size_t i = 0; i < targets.size(); i ++)
     {
-        printf("target[%lu] = **%s**\n", i, targets[i].c_str());
         if (targets[i][0] == '#' || targets[i][0] == '&')
         {
             if (_channelExist(targets[i]))
@@ -59,7 +58,6 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
         else if (_nickExist(targets[i]))
         {
             int sock_target = _findNick(targets[i]);
-            // if target is not registered fully yet -> continue (?)
             full_text = ":" + client.getNickname() + " PRIVMSG " + targets[i] + ": " + text_to_send;
             this->_clients[sock_target].sendMessage(full_text);
         } 
