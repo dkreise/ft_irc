@@ -18,7 +18,7 @@
 #define ERR_BANNEDFROMCHAN(client, channel) (std::string("474 ") + client + " " + channel + " :Cannot join channel (+b)")
 #define ERR_CHANNELISFULL(client, channel) (std::string("471 ") + client + " " + channel + " :Cannot join channel (+l)")
 #define ERR_BADCHANMASK(channel) (std::string("476 ") + channel + " :Bad Channel Mask")
-#define RPL_JOIN(client, name, host, channel) (std::string(":") + client + "!" + name + "@" + host + " JOIN :" + channel)
+#define RPL_JOIN(client, name, host, channel) (std::string(":") + client + "!" + name + "@" + host + " JOIN " + channel)
 #define RPL_NAMREPLY(client, channel, userlist) (std::string(":localhost 353 ") + client + " = " + channel + " :" + userlist)
 #define RPL_ENDOFNAMES(client, channel) (std::string(":localhost 366 ") + client + " " + channel + " :End of /NAMES list")
 
@@ -41,7 +41,7 @@
 
 // kick
 #define KICK_MSG(clientNick, clientUser, clientHost, channel, target, kickMsg) (std::string(":") + clientNick + "!" + clientUser + "@" + clientHost + " KICK " + channel + " " + target + " " + kickMsg)
-#define ERR_CHANOPRIVSNEEDED(client, channel) (std::string("482 localhost ") + client + " " + channel + " You're not channel operator")
+#define ERR_CHANOPRIVSNEEDED(client, channel) (std::string("482 localhost ") + client + " " + channel + " :You're not channel operator")
 #define ERR_NOTONCHANNEL(client, channel) (std::string("442 ") + client + " " + channel + " :You're not on that channel")
 #define ERR_USERNOTINCHANNEL(client, nick, channel) (std::string("441 ") + client + " " + nick + " " + channel + " :They aren't on that channel")
 

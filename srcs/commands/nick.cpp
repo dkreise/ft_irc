@@ -34,7 +34,7 @@ void Server::_nick(int& i, std::vector<std::string>& args)
     this->_clients[sock].setNickname(nick);
     std::string msg = ":" + old_nick + " NICK " + nick;
     this->_clients[sock].sendMessage(msg);
-    
+
     if (old_nick != "")
     {
         for (int j = 0; j < this->_nfds; j ++)
@@ -55,6 +55,8 @@ void Server::_nick(int& i, std::vector<std::string>& args)
     this->_clients[sock].sendMessage(RPL_YOURHOST(nick));
     this->_clients[sock].sendMessage(RPL_CREATED(nick));
     this->_clients[sock].sendMessage(RPL_MYINFO(nick));
+    msg = ":TheBot PRIVMSG " + nick + ": Welcome to our beautiful Server! I am your bot that does nothing!";
+    this->_clients[sock].sendMessage(msg);
 }
 
 bool Server::_nickExist(std::string& nick)

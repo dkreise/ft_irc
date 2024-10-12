@@ -62,12 +62,14 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 		{
 			if (j >= args.size() && flagMode)
 				break ;
-			std::string key = args[j];
 			++j;
 
 			channel.setMode('k', flagMode);
 			if (flagMode)
+			{
+				std::string key = args[j];
 				channel.setKey(key);
+			}
 			// else
 			// 	channel.setKey(key);
 			break ;
@@ -100,14 +102,16 @@ void Server::_mode(int& i, std::vector<std::string>& args)
 		{
 			if (j >= args.size() && flagMode)
 				break ;
-			int limit = atoi(args[j].c_str());
-			if (limit > CLIENT_LIMIT)
-				limit = CLIENT_LIMIT;
 			++j;
 
 			channel.setMode('l', flagMode);
 			if (flagMode)
+			{
+				int limit = atoi(args[j].c_str());
+				if (limit > CLIENT_LIMIT)
+					limit = CLIENT_LIMIT;
 				channel.setClientLimit(limit);
+			}
 			else
 				channel.setClientLimit(CLIENT_LIMIT);
 			break ;

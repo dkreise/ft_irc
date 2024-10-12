@@ -52,7 +52,7 @@ void Server::_privmsg(int& i, std::vector<std::string>& args)
         else if (targets[i] == "TheBot")
         {
             // Bot response:
-            full_text = ":TheBot PRIVMSG " + client.getNickname() + ": I am listening to you..";
+            full_text = ":TheBot PRIVMSG " + client.getNickname() + " :I am listening to you..";
             this->_clients[sock].sendMessage(full_text);
         }
         else if (_nickExist(targets[i]))

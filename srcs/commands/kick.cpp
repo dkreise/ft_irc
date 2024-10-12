@@ -10,7 +10,15 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 	if (args.size() < 2)
         return client.sendMessage(ERR_NEEDMOREPARAMS(client.getNickname(), "KICK"));
 	if (args.size() >= 4)
+	{
 		kickMsg = args[3];
+		for (size_t j = 4; j < args.size(); j ++)
+		{
+			kickMsg += " ";
+			kickMsg += args[j];
+		}
+	}
+		
 	std::string channelname = args[1];
 	if(!_channelExist(channelname))
 		return client.sendMessage(ERR_NOSUCHCHANNEL(nick, channelname));
@@ -20,7 +28,6 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 		return client.sendMessage(ERR_NOTONCHANNEL(nick, channelname));
 	if (!channel.isOperator(sock))
 		return client.sendMessage(ERR_CHANOPRIVSNEEDED(nick, channelname));
-
 	std::vector<std::string> targets = _parseMessage(args[2], ',');
 	
 	for (size_t j = 0; j < targets.size(); j++)
@@ -30,8 +37,7 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 
 		if (targets[j] == "TheBot")
 		{
-			std::string aux = ":TheBot PRIVMSG " + client.getNickname() + ": You cannot kick me!!..";
-            client.sendMessage(aux);
+			std::string aux = ":TheBot!bot@localhost PRIVMSG " + channelname + " : You cannot kick me!!..";
 			sendMessageToChannel(-1, channel, aux);
 			continue;
 		}
@@ -47,7 +53,6 @@ void Server::_kick(int& i, std::vector<std::string>& args)
 		}
 		std::string msg = KICK_MSG(nick, client.getUsername(), client.getHostname(), channelname, targetClnt.getNickname(), kickMsg);
 		sendMessageToChannel(targetSock, channel, msg);
-		targetClnt.sendMessage(msg);
 
 		targetClnt.removeFromChan(channelname);
 		channel.removeClient(targetSock);

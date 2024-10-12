@@ -36,4 +36,6 @@ void Server::_user(int& i, std::vector<std::string>& args)
     this->_clients[sock].sendMessage(RPL_YOURHOST(nick));
     this->_clients[sock].sendMessage(RPL_CREATED(nick));
     this->_clients[sock].sendMessage(RPL_MYINFO(nick));
+    std::string msg = ":TheBot PRIVMSG " + nick + ": Welcome to our beautiful Server! I am your bot that does nothing!";
+    this->_clients[sock].sendMessage(msg);
 }

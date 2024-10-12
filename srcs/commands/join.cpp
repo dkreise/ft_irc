@@ -88,7 +88,7 @@ void Server::_join(int& i, std::vector<std::string>& args)
             fds = new_channel.getClients();
             channel = new_channel;
         }
-        sendMessageToChannel(sock, channel, RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name)); // or sendChannel ?
+        sendMessageToChannel(sock, channel, RPL_JOIN(client.getNickname(), client.getRealname(), client.getHostname(), chan_name));
         if (channel.getTopic() != "")
             client.sendMessage(RPL_TOPIC(client.getNickname(), chan_name, channel.getTopic()));
         

@@ -105,7 +105,7 @@ void Server::receiveMessage(int& i)
 
     if (bytes_read <= 0)
     {
-        printf("holaaaaaaaa\n");
+        // printf("holaaaaaaaa\n");
         close(this->_fds[i].fd);
         this->_fds.erase(this->_fds.begin() + i);
         this->_nfds  --;
