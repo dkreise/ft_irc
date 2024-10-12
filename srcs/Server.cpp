@@ -92,6 +92,9 @@ void Server::acceptNewClient(void)
     this->_fds[this->_nfds].events = POLLIN;
     this->_fds[this->_nfds].revents = 0;
     this->_nfds ++;
+
+    // std::string CAPresponse = "CAP * LS\r\n";
+	// send(sock_cl, CAPresponse.c_str(), CAPresponse.length(), 0);
 }
 
 void Server::receiveMessage(int& i)
@@ -102,6 +105,7 @@ void Server::receiveMessage(int& i)
 
     if (bytes_read <= 0)
     {
+        printf("holaaaaaaaa\n");
         close(this->_fds[i].fd);
         this->_fds.erase(this->_fds.begin() + i);
         this->_nfds  --;
@@ -162,6 +166,8 @@ void Server::checkMessage(int& i, std::string& msg)
     args = _parseMessage(msg, ' ');
     if (args.size() == 0)
         return;
+
+    std::cout << msg << std::endl;
 
     std::string cmds[10] = {"PASS", "NICK", "USER", "PING", "PRIVMSG", "JOIN", "TOPIC", "KICK", "INVITE", "MODE"};
 	void (Server::*f[10])(int &client_fd, std::vector<std::string> &args) = {&Server::_pass, &Server::_nick, &Server::_user, &Server::_ping, &Server::_privmsg, &Server::_join, &Server::_topic, &Server::_kick, &Server::_invite, &Server::_mode};

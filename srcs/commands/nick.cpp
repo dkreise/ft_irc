@@ -15,10 +15,10 @@ void Server::_nick(int& i, std::vector<std::string>& args)
         this->_clients[sock].sendMessage(ERR_NONICKNAMEGIVEN(this->_clients[sock].getNickname()));
         return;
     }
-    for (size_t i = 2; i < args.size(); i ++)
+    for (size_t j = 2; j < args.size(); j ++)
     {
         nick += " ";
-        nick += args[i];
+        nick += args[j];
     }
     if (_nickExist(nick))
     {
@@ -34,7 +34,18 @@ void Server::_nick(int& i, std::vector<std::string>& args)
     this->_clients[sock].setNickname(nick);
     std::string msg = ":" + old_nick + " NICK " + nick;
     this->_clients[sock].sendMessage(msg);
-    // do we need to inform others?
+    
+    if (old_nick != "")
+    {
+        for (int j = 0; j < this->_nfds; j ++)
+        {
+            int cur = this->_fds[j].fd;
+            if (cur != this->_sock && cur != sock)
+            {
+                this->_clients[cur].sendMessage(msg);
+            }
+        }
+    }
 
     if (this->_clients[sock].isRegistered() || this->_clients[sock].getUsername() == "")
         return;
