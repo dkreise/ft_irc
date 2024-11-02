@@ -75,4 +75,6 @@ class Server
         static void	_signalHandler(int signum);
 };
 
+bool	allNum(std::string port);
+
 #endif
